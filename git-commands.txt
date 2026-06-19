@@ -1,1 +1,9 @@
-
+git init
+git clone <repo-url>
+git status
+git add .
+git commit -m "Day001"
+git push origin main
+git log
+git branch
+git checkout
