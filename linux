@@ -1,0 +1,83 @@
+# Day 002 - Linux Filesystem
+
+## Topics Covered
+
+- Linux Directory Structure
+- pwd
+- ls
+- cd
+- mkdir
+- touch
+- cp
+- mv
+- rm
+- rmdir
+- cat
+- head
+- tail
+- tree
+
+## Objective
+
+Learn Linux file system navigation and file management commands. 
+
+| Directory | Purpose                        |
+| --------- | ------------------------------ |
+| `/`       | Root directory                 |
+| `/home`   | User home directories          |
+| `/root`   | Root user's home               |
+| `/etc`    | Configuration files            |
+| `/var`    | Logs and variable data         |
+| `/tmp`    | Temporary files                |
+| `/usr`    | User programs                  |
+| `/bin`    | Essential commands             |
+| `/sbin`   | System administration commands |
+| `/opt`    | Optional software              |
+| `/dev`    | Device files                   |
+| `/proc`   | Process information            |
+
+
+
+pwd
+ls
+ls -l
+ls -la
+ls -lh
+
+cd /home
+cd ~
+
+mkdir devops
+cd devops
+
+touch test.txt
+echo "Hello DevOps" > test.txt
+
+cat test.txt
+
+cp test.txt copy.txt
+
+mv copy.txt renamed.txt
+
+rm renamed.txt
+
+mkdir project
+rmdir project
+
+history
+
+clear
+
+mkdir Company
+
+cd Company
+
+mkdir Production Development Backup
+
+mkdir Production/App
+mkdir Production/Database
+mkdir Production/Logs
+
+touch README.md
+
+tree
