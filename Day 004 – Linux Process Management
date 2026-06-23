@@ -1,0 +1,290 @@
+📂 Repository Structure
+365-days-devops/
+└── Day004/
+    ├── README.md
+    ├── commands.sh
+    ├── notes.md
+    ├── interview.md
+    ├── lab.md
+    ├── troubleshooting.md
+    └── screenshots/
+📚 What You Will Learn
+What is a Process?
+Process Lifecycle
+Process States
+PID (Process ID)
+PPID (Parent Process ID)
+Zombie Process
+Daemon Process
+Foreground vs Background Process
+Process Priority (Nice Values)
+🛠️ Task 1 – Essential Commands
+
+Run each command and note what it does.
+
+ps
+
+Lists processes attached to the current terminal.
+
+ps -ef
+
+Shows all running processes.
+
+ps aux
+
+Displays CPU, memory, user, and command details.
+
+top
+
+Shows live system resource usage.
+
+If available:
+
+htop
+
+Install if needed:
+
+sudo apt install htop
+🛠️ Task 2 – Process Monitoring
+
+Check CPU usage:
+
+top
+
+Check memory usage:
+
+free -h
+
+Check uptime:
+
+uptime
+
+Load average:
+
+cat /proc/loadavg
+🛠️ Task 3 – Start Background Processes
+
+Run:
+
+sleep 300 &
+
+Find it:
+
+ps -ef | grep sleep
+
+Display background jobs:
+
+jobs
+
+Bring it back to the foreground:
+
+fg
+
+Stop it with:
+
+Ctrl + C
+🛠️ Task 4 – Kill Processes
+
+Start another process:
+
+sleep 600 &
+
+Find its PID:
+
+ps -ef | grep sleep
+
+Kill it gracefully:
+
+kill PID
+
+Force kill:
+
+kill -9 PID
+
+Kill by name:
+
+pkill sleep
+
+or
+
+killall sleep
+🛠️ Task 5 – Process Priority
+
+Start:
+
+sleep 500 &
+
+Check priority:
+
+ps -el
+
+Lower priority:
+
+nice -n 10 sleep 500
+
+Change priority:
+
+renice 5 PID
+🛠️ Task 6 – Create commands.sh
+#!/bin/bash
+
+echo "Current User:"
+whoami
+
+echo ""
+
+echo "Running Processes:"
+ps -ef | head
+
+echo ""
+
+echo "Memory Usage:"
+free -h
+
+echo ""
+
+echo "Disk Usage:"
+df -h
+
+echo ""
+
+echo "System Uptime:"
+uptime
+
+echo ""
+
+echo "CPU Information:"
+lscpu | head -20
+
+echo ""
+
+echo "Top 5 Memory Consumers:"
+ps aux --sort=-%mem | head -6
+
+echo ""
+
+echo "Top 5 CPU Consumers:"
+ps aux --sort=-%cpu | head -6
+
+Run:
+
+chmod +x commands.sh
+./commands.sh
+🧪 Task 7 – Production Lab
+
+Imagine an application is consuming 100% CPU.
+
+Investigate using:
+
+top
+
+or
+
+ps aux --sort=-%cpu
+
+Identify the process.
+
+Find the PID.
+
+Kill it safely:
+
+kill PID
+
+If it doesn't stop:
+
+kill -9 PID
+
+Verify it's gone:
+
+ps -ef | grep process_name
+📝 notes.md
+# Linux Process Management
+
+Process → Running program
+
+PID → Process ID
+
+PPID → Parent Process ID
+
+Foreground → Uses terminal
+
+Background → Runs independently
+
+kill → Graceful termination
+
+kill -9 → Force termination
+
+top → Live monitoring
+
+htop → Interactive monitoring
+
+nice → Set priority
+
+renice → Change priority
+📄 interview.md
+# Linux Process Interview Questions
+
+1. What is a Linux process?
+
+2. What is PID?
+
+3. What is PPID?
+
+4. Difference between kill and kill -9?
+
+5. Difference between top and htop?
+
+6. What is a Zombie process?
+
+7. What is a Daemon?
+
+8. What is Nice value?
+
+9. Difference between Foreground and Background process?
+
+10. How do you identify a high CPU process?
+
+11. What command lists all running processes?
+
+12. How do you kill all processes by name?
+🔥 Mini Project – System Health Check
+
+Create health-check.sh:
+
+#!/bin/bash
+
+echo "===== System Health Report ====="
+echo "Hostname: $(hostname)"
+echo "Current User: $(whoami)"
+echo "Current Date: $(date)"
+
+echo ""
+echo "===== Uptime ====="
+uptime
+
+echo ""
+echo "===== Memory ====="
+free -h
+
+echo ""
+echo "===== Disk ====="
+df -h
+
+echo ""
+echo "===== CPU ====="
+lscpu | grep "Model name"
+
+echo ""
+echo "===== Top CPU Processes ====="
+ps aux --sort=-%cpu | head -6
+
+echo ""
+echo "===== Top Memory Processes ====="
+ps aux --sort=-%mem | head -6
+
+Run:
+
+chmod +x health-check.sh
+./health-check.sh
+
+Commit this script to your repository. This is a practical automation task that demonstrates useful Linux scripting skills.
