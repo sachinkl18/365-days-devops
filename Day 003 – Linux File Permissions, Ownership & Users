@@ -6,3 +6,247 @@
     ├── lab.md
     ├── interview.md
     └── screenshots/
+📘 Task 1 – Learn Linux Permissions
+
+Every file has permissions for:
+
+Owner (u)
+Group (g)
+Others (o)
+
+Example:
+
+-rwxr-xr--
+
+Breakdown:
+
+-          → File
+rwx        → Owner
+r-x        → Group
+r--        → Others
+
+Permission values:
+
+Symbol	Meaning	Value
+r	Read	4
+w	Write	2
+x	Execute	1
+
+Examples:
+
+Number	Meaning
+777	Everyone has full access
+755	Owner full, others read & execute
+700	Owner only
+644	Owner read/write, others read
+600	Private file
+📘 Task 2 – Practice Commands
+
+Run these commands one by one:
+
+pwd
+
+touch demo.txt
+
+ls -l
+
+chmod 777 demo.txt
+
+ls -l
+
+chmod 755 demo.txt
+
+ls -l
+
+chmod 644 demo.txt
+
+ls -l
+
+chmod 600 demo.txt
+
+ls -l
+
+Observe how permissions change.
+
+📘 Task 3 – Symbolic Permissions
+chmod u+x demo.txt
+
+chmod g+w demo.txt
+
+chmod o-r demo.txt
+
+chmod a+x demo.txt
+
+ls -l
+
+Understand:
+
+u = User
+g = Group
+o = Others
+a = All
+📘 Task 4 – Ownership
+
+Check file owner:
+
+ls -l
+
+Change owner (requires sudo):
+
+sudo chown $USER demo.txt
+
+Change group:
+
+sudo chgrp $USER demo.txt
+
+View current user:
+
+whoami
+
+View user ID:
+
+id
+📘 Task 5 – Create Users (Lab)
+
+Only if you're using your own Linux machine or VM.
+
+sudo adduser devopsuser
+
+sudo passwd devopsuser
+
+sudo usermod -aG sudo devopsuser
+
+groups devopsuser
+
+Delete the user (optional):
+
+sudo deluser devopsuser
+📘 Task 6 – Shell Script
+
+Create commands.sh:
+
+#!/bin/bash
+
+echo "Current User:"
+whoami
+
+echo ""
+
+echo "User ID:"
+id
+
+echo ""
+
+echo "Creating file..."
+touch demo.txt
+
+echo ""
+
+echo "Current permissions:"
+ls -l demo.txt
+
+echo ""
+
+echo "Changing permissions to 755..."
+chmod 755 demo.txt
+
+ls -l demo.txt
+
+echo ""
+
+echo "Changing permissions to 644..."
+chmod 644 demo.txt
+
+ls -l demo.txt
+
+echo ""
+
+echo "Adding execute permission..."
+chmod +x demo.txt
+
+ls -l demo.txt
+
+Make it executable:
+
+chmod +x commands.sh
+./commands.sh
+📘 Task 7 – Notes (notes.md)
+# Linux File Permissions
+
+r = Read = 4
+
+w = Write = 2
+
+x = Execute = 1
+
+755
+
+Owner = rwx
+
+Group = r-x
+
+Others = r-x
+
+644
+
+Owner = rw-
+
+Group = r--
+
+Others = r--
+📘 Task 8 – Interview Questions (interview.md)
+# Linux Permissions Interview Questions
+
+1. What does chmod do?
+
+2. Difference between 777 and 755?
+
+3. What is chmod 644?
+
+4. What is chown?
+
+5. Difference between chmod and chown?
+
+6. What is umask?
+
+7. How do you make a script executable?
+
+8. What are symbolic permissions?
+
+9. Difference between owner and group?
+
+10. Why should you avoid chmod 777?
+🧪 Mini Project
+
+Create this structure:
+
+Secure-App/
+├── app.sh
+├── config.conf
+├── logs/
+└── backup/
+
+Commands:
+
+mkdir Secure-App
+
+cd Secure-App
+
+touch app.sh
+
+touch config.conf
+
+mkdir logs
+
+mkdir backup
+
+chmod 755 app.sh
+
+chmod 600 config.conf
+
+ls -l
+
+Expected:
+
+-rwxr-xr-x app.sh
+-rw------- config.conf
