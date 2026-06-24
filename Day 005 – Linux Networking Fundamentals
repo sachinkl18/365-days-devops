@@ -1,0 +1,267 @@
+📁 Repository Structure
+365-days-devops/
+└── Day005/
+    ├── README.md
+    ├── commands.sh
+    ├── network-report.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    └── screenshots/
+🎯 Learning Objectives
+
+By the end of today, you'll understand:
+
+IP Address
+Public vs Private IP
+IPv4 vs IPv6
+MAC Address
+Default Gateway
+DNS
+Ports
+TCP vs UDP
+CIDR Notation
+Network Interfaces
+📚 Important Commands
+Check IP Address
+ip addr
+
+or
+
+ip a
+Check Network Interfaces
+ip link
+Check Routing Table
+ip route
+Check Hostname
+hostname
+Check Hostname and IP
+hostname -I
+Ping Google DNS
+ping 8.8.8.8
+Ping Google Domain
+ping google.com
+Check DNS Configuration
+cat /etc/resolv.conf
+DNS Lookup
+nslookup google.com
+
+If unavailable:
+
+sudo apt install dnsutils
+Dig Command
+dig google.com
+Show Listening Ports
+ss -tuln
+Show Active Connections
+ss -ant
+Network Statistics
+netstat -tulnp
+
+If missing:
+
+sudo apt install net-tools
+Test HTTP
+curl https://google.com
+Download File
+wget https://example.com
+🧪 Lab 1 – Explore Your System
+
+Run:
+
+hostname
+
+hostname -I
+
+ip addr
+
+ip route
+
+ss -tuln
+
+cat /etc/resolv.conf
+
+Save the output.
+
+🧪 Lab 2 – Connectivity Test
+
+Test:
+
+ping 8.8.8.8
+
+Then:
+
+ping google.com
+
+If IP works but the domain doesn't, investigate your DNS settings.
+
+🧪 Lab 3 – Port Inspection
+
+Run:
+
+ss -tuln
+
+Answer:
+
+Which ports are listening?
+Which services use them?
+Are there any unexpected open ports?
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Hostname ====="
+hostname
+
+echo ""
+
+echo "===== IP Address ====="
+hostname -I
+
+echo ""
+
+echo "===== Interfaces ====="
+ip addr
+
+echo ""
+
+echo "===== Routes ====="
+ip route
+
+echo ""
+
+echo "===== DNS ====="
+cat /etc/resolv.conf
+
+echo ""
+
+echo "===== Listening Ports ====="
+ss -tuln
+
+echo ""
+
+echo "===== Connectivity Test ====="
+ping -c 4 8.8.8.8
+
+Run:
+
+chmod +x commands.sh
+./commands.sh
+💻 Mini Project – Network Report
+
+Create network-report.sh
+
+#!/bin/bash
+
+REPORT="network-report.txt"
+
+echo "===== Network Report =====" > $REPORT
+echo "Generated: $(date)" >> $REPORT
+echo "" >> $REPORT
+
+echo "Hostname:" >> $REPORT
+hostname >> $REPORT
+
+echo "" >> $REPORT
+
+echo "IP Address:" >> $REPORT
+hostname -I >> $REPORT
+
+echo "" >> $REPORT
+
+echo "Routes:" >> $REPORT
+ip route >> $REPORT
+
+echo "" >> $REPORT
+
+echo "DNS:" >> $REPORT
+cat /etc/resolv.conf >> $REPORT
+
+echo "" >> $REPORT
+
+echo "Listening Ports:" >> $REPORT
+ss -tuln >> $REPORT
+
+echo "Report saved to $REPORT"
+📖 notes.md
+# Linux Networking Notes
+
+IP Address → Device identifier on a network.
+
+Gateway → Router used to reach other networks.
+
+DNS → Resolves domain names into IP addresses.
+
+TCP → Reliable communication.
+
+UDP → Faster, connectionless communication.
+
+Port → Logical endpoint for communication.
+
+CIDR → Network address notation.
+📝 Interview Questions
+
+Create interview.md
+
+# Linux Networking Interview Questions
+
+1. What is an IP address?
+2. Difference between IPv4 and IPv6?
+3. What is DNS?
+4. Difference between TCP and UDP?
+5. What is CIDR notation?
+6. What does ping test?
+7. What is the default gateway?
+8. What command displays routing information?
+9. Difference between ss and netstat?
+10. How do you troubleshoot if a server cannot reach the internet?
+11. What is the purpose of /etc/resolv.conf?
+12. What is a subnet mask?
+🔥 Production Scenario
+
+Problem:
+
+Your Jenkins server cannot download dependencies from the internet.
+
+Troubleshooting steps:
+
+Check IP:
+hostname -I
+Check routes:
+ip route
+Test gateway:
+ping <gateway-ip>
+Test internet:
+ping 8.8.8.8
+Test DNS:
+ping google.com
+Verify DNS configuration:
+cat /etc/resolv.conf
+Check firewall rules if needed.
+🌟 Senior DevOps Challenge
+
+Create a script named network-health.sh that:
+
+Prints hostname
+Prints IP address
+Prints default gateway
+Prints DNS configuration
+Tests connectivity to 8.8.8.8
+Tests DNS resolution for google.com
+Lists listening ports
+Saves everything to network-health-report.txt
+Adds the current date and time
+📤 Git Commit
+git add .
+git commit -m "Day005 - Linux Networking Fundamentals"
+git push origin main
+🏆 Skills You Gain Today
+
+By completing Day 5, you'll be able to:
+
+Understand Linux networking basics.
+Inspect interfaces and routes.
+Troubleshoot internet and DNS issues.
+Analyze open ports.
+Create a reusable network diagnostics script.
+Answer common networking questions in DevOps interviews.
