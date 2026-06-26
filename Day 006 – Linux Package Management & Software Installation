@@ -1,0 +1,348 @@
+🎯 Goal
+
+Learn how Linux installs, updates, removes, and manages software packages. This is a daily task for DevOps engineers.
+
+📂 Repository Structure
+365-days-devops/
+└── Day006/
+    ├── README.md
+    ├── commands.sh
+    ├── package-health.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    └── screenshots/
+📘 Learning Objectives
+
+By the end of today you should understand:
+
+Package Manager
+Repository
+apt
+apt-cache
+dpkg
+snap
+Repository Sources
+Package Dependencies
+Updating Packages
+Removing Packages
+📖 Theory
+What is a Package?
+
+A package is software bundled with all required files.
+
+Examples
+
+nginx
+git
+docker
+vim
+curl
+What is a Repository?
+
+A repository is an online collection of packages.
+
+Ubuntu downloads software from repositories configured in:
+
+/etc/apt/sources.list
+🛠️ Task 1 – Update Package List
+sudo apt update
+
+Understand:
+
+Downloads the latest package index.
+Does not install updates.
+🛠️ Task 2 – Upgrade Packages
+sudo apt upgrade
+
+Updates installed software to newer versions.
+
+🛠️ Task 3 – Full Upgrade
+sudo apt full-upgrade
+
+Handles dependency changes when upgrading.
+
+🛠️ Task 4 – Search Packages
+apt search nginx
+
+Search for:
+
+apt search docker
+apt search python3
+🛠️ Task 5 – Package Information
+apt show git
+
+Look for:
+
+Version
+Dependencies
+Description
+🛠️ Task 6 – Install Software
+
+Install Git if needed:
+
+sudo apt install git
+
+Install Curl:
+
+sudo apt install curl
+
+Install Tree:
+
+sudo apt install tree
+
+Verify:
+
+git --version
+curl --version
+tree --version
+🛠️ Task 7 – Remove Packages
+
+Remove:
+
+sudo apt remove tree
+
+Completely remove:
+
+sudo apt purge tree
+
+Clean unused packages:
+
+sudo apt autoremove
+🛠️ Task 8 – Package Cache
+
+Clean cache:
+
+sudo apt clean
+
+Remove old cache:
+
+sudo apt autoclean
+🛠️ Task 9 – Using dpkg
+
+List installed packages:
+
+dpkg -l
+
+Check if Git is installed:
+
+dpkg -l | grep git
+
+Package details:
+
+dpkg -s git
+🛠️ Task 10 – Snap Packages
+
+Check Snap:
+
+snap list
+
+Install example:
+
+sudo snap install hello-world
+
+Run:
+
+hello-world
+
+Remove:
+
+sudo snap remove hello-world
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Updating Repository ====="
+
+sudo apt update
+
+echo ""
+
+echo "===== Installed Git Version ====="
+
+git --version
+
+echo ""
+
+echo "===== Installed Curl Version ====="
+
+curl --version | head -1
+
+echo ""
+
+echo "===== Installed Packages ====="
+
+dpkg -l | head
+
+echo ""
+
+echo "===== Searching nginx ====="
+
+apt search nginx | head -10
+
+Run:
+
+chmod +x commands.sh
+
+./commands.sh
+💻 Mini Project – Package Health Report
+
+Create:
+
+package-health.sh
+#!/bin/bash
+
+REPORT="package-report.txt"
+
+echo "Package Health Report" > $REPORT
+
+echo "Generated: $(date)" >> $REPORT
+
+echo "" >> $REPORT
+
+echo "Git Version:" >> $REPORT
+git --version >> $REPORT
+
+echo "" >> $REPORT
+
+echo "Curl Version:" >> $REPORT
+curl --version | head -1 >> $REPORT
+
+echo "" >> $REPORT
+
+echo "Installed Packages:" >> $REPORT
+dpkg -l | head -20 >> $REPORT
+
+echo "" >> $REPORT
+
+echo "Repository Status:" >> $REPORT
+apt-cache policy >> $REPORT
+
+echo "Report saved."
+🧪 Lab Exercise
+
+Install:
+
+tree
+htop
+vim
+
+Verify:
+
+tree --version
+
+htop --version
+
+vim --version
+
+Remove:
+
+tree
+
+Verify removal.
+
+📝 notes.md
+# Linux Package Management
+
+apt update
+
+Updates package index.
+
+apt upgrade
+
+Updates installed packages.
+
+apt install
+
+Installs software.
+
+apt remove
+
+Removes package.
+
+apt purge
+
+Removes package and configuration.
+
+apt autoremove
+
+Removes unused dependencies.
+
+dpkg
+
+Low-level Debian package manager.
+📄 interview.md
+# Interview Questions
+
+1. Difference between apt update and apt upgrade?
+
+2. What is a package repository?
+
+3. What is apt?
+
+4. What is dpkg?
+
+5. Difference between remove and purge?
+
+6. What is apt autoremove?
+
+7. Where are Ubuntu repositories configured?
+
+8. How do you search for a package?
+
+9. How do you verify a package is installed?
+
+10. Difference between apt and snap?
+
+11. What is package dependency?
+
+12. What happens if dependency installation fails?
+🔥 Production Scenario
+
+A Jenkins build fails because the curl command is missing.
+
+Troubleshooting steps:
+
+which curl
+
+curl --version
+
+sudo apt update
+
+sudo apt install curl
+
+curl --version
+🧠 Senior DevOps Challenge
+
+Create a script named software-audit.sh that:
+
+Checks whether git, curl, docker, kubectl, and terraform are installed.
+Displays each version if installed.
+Prints "Not Installed" if missing.
+Saves the results to software-audit-report.txt.
+Adds the current timestamp.
+
+Example output:
+
+===== Software Audit =====
+Generated: Thu Jun 26 10:30:12 UTC 2026
+
+Git: Installed (2.xx.x)
+Curl: Installed (8.x.x)
+Docker: Not Installed
+Kubectl: Not Installed
+Terraform: Not Installed
+📤 Git Commit
+git add .
+git commit -m "Day006 - Linux Package Management"
+git push origin main
+🎯 Skills You'll Gain Today
+
+By completing Day 6, you'll be able to:
+
+Install, update, and remove software packages.
+Understand repositories and package dependencies.
+Use apt, dpkg, and snap.
+Verify installed software.
+Create an automation script for package auditing.
+Troubleshoot missing software in production environments.
