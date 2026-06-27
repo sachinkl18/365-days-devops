@@ -1,0 +1,294 @@
+Repository Structure
+365-days-devops/
+└── Day007/
+    ├── README.md
+    ├── commands.sh
+    ├── disk-health.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    └── screenshots/
+📚 Learning Objectives
+
+Today you'll learn:
+
+Hard Disk vs SSD
+Partitions
+Filesystems
+Mounting & Unmounting
+Disk Usage
+Inodes
+LVM (Introduction)
+Swap Space
+Disk Cleanup
+📖 Theory
+What is a Filesystem?
+
+A filesystem organizes data on storage devices.
+
+Common Linux filesystems:
+
+ext4
+xfs
+btrfs
+Block Devices
+
+List disks:
+
+lsblk
+
+Example:
+
+NAME   SIZE TYPE MOUNTPOINT
+sda    100G disk
+├─sda1   1G part /boot
+└─sda2  99G part /
+🛠️ Task 1 – Check Disk Usage
+df -h
+
+Learn:
+
+Filesystem
+Used
+Available
+Mounted on
+🛠️ Task 2 – Check Folder Sizes
+du -sh *
+
+Current directory:
+
+du -sh .
+
+Largest folders:
+
+du -ah | sort -rh | head -20
+🛠️ Task 3 – List Block Devices
+lsblk
+
+Detailed info:
+
+sudo fdisk -l
+🛠️ Task 4 – Filesystem Information
+blkid
+🛠️ Task 5 – Mount Points
+mount
+
+or
+
+findmnt
+🛠️ Task 6 – Inodes
+
+Sometimes disk space is free but inodes are exhausted.
+
+Check:
+
+df -i
+🛠️ Task 7 – Memory & Swap
+free -h
+
+Swap details:
+
+swapon --show
+🛠️ Task 8 – Disk Cleanup
+
+Clean package cache:
+
+sudo apt clean
+
+Remove unused packages:
+
+sudo apt autoremove
+
+Find large log files:
+
+sudo du -sh /var/log/*
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Disk Usage ====="
+df -h
+
+echo ""
+
+echo "===== Directory Sizes ====="
+du -sh *
+
+echo ""
+
+echo "===== Block Devices ====="
+lsblk
+
+echo ""
+
+echo "===== Filesystems ====="
+blkid
+
+echo ""
+
+echo "===== Mounted Filesystems ====="
+findmnt
+
+echo ""
+
+echo "===== Memory & Swap ====="
+free -h
+
+echo ""
+
+echo "===== Inodes ====="
+df -i
+
+Run:
+
+chmod +x commands.sh
+./commands.sh
+💻 Mini Project – Disk Health Report
+
+Create disk-health.sh
+
+#!/bin/bash
+
+REPORT="disk-health-report.txt"
+
+echo "===== Disk Health Report =====" > "$REPORT"
+echo "Generated: $(date)" >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "Disk Usage:" >> "$REPORT"
+df -h >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "Block Devices:" >> "$REPORT"
+lsblk >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "Mounted Filesystems:" >> "$REPORT"
+findmnt >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "Memory & Swap:" >> "$REPORT"
+free -h >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "Inodes:" >> "$REPORT"
+df -i >> "$REPORT"
+
+echo ""
+echo "Report generated: $REPORT"
+🧪 Lab Exercise
+Create a folder named storage-lab.
+mkdir storage-lab
+Create three files.
+touch file1 file2 file3
+Check folder size.
+du -sh storage-lab
+Display filesystem information.
+df -h
+Display block devices.
+lsblk
+📝 notes.md
+# Linux Storage Notes
+
+df -h
+Shows filesystem usage.
+
+du -sh
+Shows folder size.
+
+lsblk
+Lists disks and partitions.
+
+blkid
+Shows filesystem UUIDs.
+
+mount
+Displays mounted filesystems.
+
+findmnt
+Shows mount hierarchy.
+
+df -i
+Displays inode usage.
+
+free -h
+Shows RAM and swap usage.
+📄 interview.md
+# Linux Storage Interview Questions
+
+1. Difference between df and du?
+
+2. What is a filesystem?
+
+3. What is ext4?
+
+4. What is swap?
+
+5. What is LVM?
+
+6. What are inodes?
+
+7. Difference between mount and umount?
+
+8. What command lists block devices?
+
+9. How do you identify disk usage?
+
+10. What happens if a filesystem is 100% full?
+
+11. What is UUID?
+
+12. How do you troubleshoot disk space issues?
+🔥 Production Scenario
+
+Problem: A Jenkins server has stopped working because the root filesystem is full.
+
+Investigation
+df -h
+
+Check large directories:
+
+sudo du -sh /var/*
+
+Find the biggest files:
+
+sudo find / -type f -size +100M
+
+Clean logs (only after verifying they are safe to remove or rotate):
+
+sudo journalctl --vacuum-time=7d
+
+Remove unused packages:
+
+sudo apt autoremove
+sudo apt clean
+
+Verify free space:
+
+df -h
+🧠 Senior DevOps Challenge
+
+Write a script called storage-monitor.sh that:
+
+Checks disk usage.
+Warns if any filesystem exceeds 80% usage.
+Displays the top 10 largest directories under /var.
+Shows inode usage.
+Saves the report to storage-report.txt with a timestamp.
+
+Bonus: Exit with a non-zero status code if any filesystem exceeds 90%, making it suitable for monitoring or CI/CD checks.
+
+📤 Git Commit
+git add .
+git commit -m "Day007 - Linux Disk & Storage Management"
+git push origin main
+🎯 Skills You'll Gain Today
+
+By completing Day 7, you'll be able to:
+
+Analyze disk and filesystem usage.
+Identify storage bottlenecks.
+Inspect block devices and mount points.
+Understand swap and inode usage.
+Troubleshoot common production storage issues.
+Create an automated disk health monitoring script.
