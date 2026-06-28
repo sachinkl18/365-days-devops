@@ -1,0 +1,337 @@
+📅 Day 008 Preview
+
+We'll move to Linux Services & systemd, covering:
+
+systemctl
+Service lifecycle (start, stop, restart, reload)
+Boot targets
+Enable/disable services
+Viewing logs with journalctl
+Creating your own systemd service
+Production troubleshooting scenarios
+Senior DevOps interview questions
+
+This is one of the most important Linux topics because nearly every server application (Nginx, Docker, Jenkins, SSH, Kubernetes components, etc.) runs as a systemd service.
+
+next day
+
+Excellent, Sachin! You're now entering a topic that every Senior DevOps Engineer uses daily.
+
+🚀 Day 008 – Linux Services & systemd (Enterprise Level)
+
+Difficulty: ⭐⭐⭐⭐☆
+
+Duration: 2–3 Hours
+
+Goal: Learn how Linux services work, manage them with systemd, inspect logs, and create your own service.
+
+📁 Repository Structure
+365-days-devops/
+└── Day008/
+    ├── README.md
+    ├── commands.sh
+    ├── service-monitor.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    ├── custom-service.sh
+    └── screenshots/
+🎯 Learning Objectives
+
+By the end of today, you'll know:
+
+What is systemd
+What is a service
+Service lifecycle
+Service units
+Boot targets
+Enable/Disable services
+View service logs
+Create a custom service
+Troubleshoot failed services
+📖 Theory
+What is systemd?
+
+systemd is the init system used by modern Linux distributions. It starts services during boot and manages them while the system is running.
+
+Examples of services:
+
+ssh
+docker
+nginx
+jenkins
+cron
+🛠️ Task 1 – List Running Services
+systemctl list-units --type=service
+
+Only failed services:
+
+systemctl --failed
+🛠️ Task 2 – Check Service Status
+systemctl status ssh
+
+or
+
+systemctl status cron
+🛠️ Task 3 – Start, Stop & Restart
+sudo systemctl start ssh
+
+sudo systemctl stop ssh
+
+sudo systemctl restart ssh
+
+sudo systemctl reload ssh
+🛠️ Task 4 – Enable/Disable at Boot
+
+Enable:
+
+sudo systemctl enable ssh
+
+Disable:
+
+sudo systemctl disable ssh
+
+Verify:
+
+systemctl is-enabled ssh
+🛠️ Task 5 – Check Boot Time
+systemd-analyze
+
+Detailed startup analysis:
+
+systemd-analyze blame
+🛠️ Task 6 – View Logs
+
+Entire journal:
+
+journalctl
+
+Last boot:
+
+journalctl -b
+
+Logs for SSH:
+
+journalctl -u ssh
+
+Last 20 lines:
+
+journalctl -u ssh -n 20
+
+Follow logs live:
+
+journalctl -f
+🛠️ Task 7 – Create a Custom Service
+
+Create:
+
+sudo nano /etc/systemd/system/devops-demo.service
+
+Paste:
+
+[Unit]
+Description=DevOps Demo Service
+
+[Service]
+ExecStart=/bin/bash /home/$USER/devops-demo.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+Create script:
+
+nano ~/devops-demo.sh
+#!/bin/bash
+
+while true
+do
+echo "DevOps Service Running"
+sleep 30
+done
+
+Make executable:
+
+chmod +x ~/devops-demo.sh
+
+Reload:
+
+sudo systemctl daemon-reload
+
+Start:
+
+sudo systemctl start devops-demo
+
+Status:
+
+systemctl status devops-demo
+
+Enable:
+
+sudo systemctl enable devops-demo
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Running Services ====="
+systemctl list-units --type=service --state=running
+
+echo ""
+
+echo "===== Failed Services ====="
+systemctl --failed
+
+echo ""
+
+echo "===== Boot Time ====="
+systemd-analyze
+
+echo ""
+
+echo "===== Last Boot Logs ====="
+journalctl -b -n 20
+
+Run:
+
+chmod +x commands.sh
+./commands.sh
+💻 Mini Project – Service Health Monitor
+
+Create:
+
+service-monitor.sh
+
+#!/bin/bash
+
+REPORT="service-report.txt"
+
+echo "===== Service Health Report =====" > "$REPORT"
+echo "Generated: $(date)" >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "Running Services:" >> "$REPORT"
+systemctl list-units --type=service --state=running >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "Failed Services:" >> "$REPORT"
+systemctl --failed >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "System Boot Time:" >> "$REPORT"
+systemd-analyze >> "$REPORT"
+
+echo ""
+echo "Report saved to $REPORT"
+🧪 Lab Exercise
+Check if SSH is active.
+Restart SSH.
+View SSH logs.
+Enable SSH at boot.
+Disable SSH (optional).
+Check boot performance.
+📝 notes.md
+# Linux Services
+
+systemctl status
+
+Shows service status.
+
+systemctl start
+
+Starts a service.
+
+systemctl stop
+
+Stops a service.
+
+systemctl restart
+
+Restarts a service.
+
+systemctl reload
+
+Reloads configuration.
+
+systemctl enable
+
+Starts service at boot.
+
+systemctl disable
+
+Disables startup.
+
+journalctl
+
+Views logs.
+📄 interview.md
+# Linux systemd Interview Questions
+
+1. What is systemd?
+
+2. Difference between service and process?
+
+3. Difference between restart and reload?
+
+4. What does daemon-reload do?
+
+5. What is journalctl?
+
+6. How do you enable a service at boot?
+
+7. Where are service files stored?
+
+8. How do you check failed services?
+
+9. How do you troubleshoot a service that won't start?
+
+10. What is a target in systemd?
+
+11. How do you check boot performance?
+
+12. How do you create a custom service?
+🔥 Production Scenario
+
+Problem: Jenkins is down after a server reboot.
+
+Investigation
+systemctl status jenkins
+
+journalctl -u jenkins
+
+systemctl is-enabled jenkins
+
+If disabled:
+
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+
+Verify:
+
+systemctl status jenkins
+🧠 Senior DevOps Challenge
+
+Create a script named service-check.sh that:
+
+Checks if these services are active:
+ssh
+cron
+docker (if installed)
+Prints:
+Active
+Inactive
+Not Installed
+Saves the output to service-status-report.txt.
+Returns exit code 1 if any required service is inactive.
+📤 Git Commit
+git add .
+git commit -m "Day008 - Linux Services and systemd"
+git push origin main
+🎯 Skills You'll Gain Today
+
+After completing Day 8, you'll be able to:
+
+Manage Linux services with systemctl.
+Analyze service logs using journalctl.
+Create and manage your own systemd service.
+Troubleshoot failed services in production.
+Automate service health checks with Bash.
