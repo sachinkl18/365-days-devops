@@ -1,0 +1,300 @@
+Goal: Learn how to create, manage, secure, and audit Linux users and groups like a Senior DevOps Engineer.
+
+📂 Repository Structure
+365-days-devops/
+└── Day009/
+    ├── README.md
+    ├── commands.sh
+    ├── user-audit.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    └── screenshots/
+📚 Learning Objectives
+
+By the end of today, you'll understand:
+
+Linux Users
+Linux Groups
+Root User
+Sudo
+User IDs (UID)
+Group IDs (GID)
+/etc/passwd
+/etc/shadow
+/etc/group
+Password Policies
+Account Locking
+User Expiration
+📖 Theory
+What is a User?
+
+Every person or application in Linux runs as a user.
+
+Examples:
+
+root
+ubuntu
+jenkins
+nginx
+mysql
+What is a Group?
+
+Groups simplify permission management.
+
+Example:
+
+Developers
+├── sachin
+├── john
+└── alice
+🛠️ Task 1 – View Current User
+whoami
+
+Check user details:
+
+id
+🛠️ Task 2 – View All Users
+cat /etc/passwd
+
+Human-readable list:
+
+cut -d: -f1 /etc/passwd
+🛠️ Task 3 – View Groups
+cat /etc/group
+
+Current user's groups:
+
+groups
+🛠️ Task 4 – Create a User
+sudo adduser devopsuser
+
+Verify:
+
+id devopsuser
+🛠️ Task 5 – Delete a User
+
+Keep home directory:
+
+sudo deluser devopsuser
+
+Delete home directory:
+
+sudo deluser --remove-home devopsuser
+🛠️ Task 6 – Create a Group
+sudo groupadd devops
+
+Verify:
+
+getent group devops
+🛠️ Task 7 – Add User to Group
+sudo usermod -aG devops sachin
+
+Replace sachin with your Linux username.
+
+Verify:
+
+groups
+🛠️ Task 8 – Sudo Access
+
+Grant sudo:
+
+sudo usermod -aG sudo devopsuser
+
+Verify:
+
+sudo -l
+🛠️ Task 9 – Lock & Unlock User
+
+Lock:
+
+sudo passwd -l devopsuser
+
+Unlock:
+
+sudo passwd -u devopsuser
+🛠️ Task 10 – Password Expiration
+
+Check:
+
+sudo chage -l devopsuser
+
+Force password change:
+
+sudo chage -d 0 devopsuser
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Current User ====="
+whoami
+
+echo ""
+
+echo "===== User Details ====="
+id
+
+echo ""
+
+echo "===== Groups ====="
+groups
+
+echo ""
+
+echo "===== Total Users ====="
+cut -d: -f1 /etc/passwd
+
+echo ""
+
+echo "===== Total Groups ====="
+cut -d: -f1 /etc/group
+
+Run:
+
+chmod +x commands.sh
+./commands.sh
+💻 Mini Project – User Audit
+
+Create user-audit.sh
+
+#!/bin/bash
+
+REPORT="user-audit-report.txt"
+
+echo "===== User Audit =====" > "$REPORT"
+echo "Generated: $(date)" >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "Current User:" >> "$REPORT"
+whoami >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "User Details:" >> "$REPORT"
+id >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "All Users:" >> "$REPORT"
+cut -d: -f1 /etc/passwd >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "All Groups:" >> "$REPORT"
+cut -d: -f1 /etc/group >> "$REPORT"
+
+echo "Report Generated Successfully."
+🧪 Lab Exercise
+
+Create:
+
+User: developer
+Group: project-team
+
+Add the user to the group.
+
+Verify:
+
+id developer
+groups developer
+
+Delete both after testing.
+
+📝 notes.md
+# Linux User Management
+
+whoami
+Current logged-in user
+
+id
+User ID and Group ID
+
+groups
+Current user's groups
+
+adduser
+Create new user
+
+groupadd
+Create new group
+
+usermod
+Modify user
+
+passwd
+Manage password
+
+chage
+Password expiration
+📄 interview.md
+# Linux User Interview Questions
+
+1. Difference between adduser and useradd?
+
+2. What is UID?
+
+3. What is GID?
+
+4. Difference between root and normal user?
+
+5. What is sudo?
+
+6. Where are user accounts stored?
+
+7. What is /etc/shadow?
+
+8. How do you lock a user?
+
+9. How do you force password expiration?
+
+10. How do you add a user to a group?
+
+11. Difference between primary and secondary groups?
+
+12. How do you remove a user completely?
+🔥 Production Scenario
+
+Problem: A Jenkins service fails because it cannot write to /var/lib/jenkins.
+
+Investigation
+
+Check ownership:
+
+ls -ld /var/lib/jenkins
+
+Correct ownership:
+
+sudo chown -R jenkins:jenkins /var/lib/jenkins
+
+Correct permissions:
+
+sudo chmod -R 755 /var/lib/jenkins
+
+Restart Jenkins:
+
+sudo systemctl restart jenkins
+
+Verify:
+
+systemctl status jenkins
+🧠 Senior DevOps Challenge
+
+Create a script named user-security-audit.sh that:
+
+Lists all users with UID ≥ 1000.
+Lists all users with sudo privileges.
+Shows users whose passwords are expired.
+Lists locked accounts.
+Saves the report to security-audit-report.txt.
+Exits with status code 1 if any unexpected privileged user is found.
+📤 Git Commit
+git add .
+git commit -m "Day009 - Linux User & Group Administration"
+git push origin main
+🎯 Skills You'll Gain Today
+
+After completing Day 9, you'll be able to:
+
+Create and manage Linux users and groups.
+Grant and verify sudo access.
+Lock, unlock, and expire user accounts.
+Understand the purpose of /etc/passwd, /etc/shadow, and /etc/group.
+Audit user accounts with Bash.
+Troubleshoot common permission and ownership issues.
