@@ -1,0 +1,307 @@
+Day 010 – Bash Shell Scripting Fundamentals (Part 1)
+
+Difficulty: ⭐⭐⭐⭐⭐ (5/5)
+
+Duration: 3–4 Hours
+
+Goal: Learn to write Bash scripts for automation, which is one of the core skills expected from a DevOps Engineer.
+
+📂 Repository Structure
+365-days-devops/
+└── Day010/
+    ├── README.md
+    ├── hello.sh
+    ├── variables.sh
+    ├── conditions.sh
+    ├── loops.sh
+    ├── functions.sh
+    ├── calculator.sh
+    ├── notes.md
+    ├── interview.md
+    ├── lab.md
+    └── screenshots/
+📘 Learning Objectives
+
+Today you'll learn:
+
+What is Bash?
+Script execution
+Variables
+User Input
+Command-line Arguments
+If-Else
+Case Statement
+For Loop
+While Loop
+Functions
+Exit Codes
+Step 1 – Your First Script
+
+Create hello.sh
+
+#!/bin/bash
+
+echo "Hello Sachin!"
+echo "Welcome to Day 10"
+echo "Learning Bash Scripting"
+
+Run:
+
+chmod +x hello.sh
+./hello.sh
+Step 2 – Variables
+
+Create variables.sh
+
+#!/bin/bash
+
+NAME="Sachin"
+
+COMPANY="OpenAI"
+
+echo "Name : $NAME"
+
+echo "Company : $COMPANY"
+
+DATE=$(date)
+
+echo "Today : $DATE"
+
+HOST=$(hostname)
+
+echo "Hostname : $HOST"
+Step 3 – User Input
+#!/bin/bash
+
+read -p "Enter your name : " NAME
+
+echo "Welcome $NAME"
+Step 4 – Command Line Arguments
+#!/bin/bash
+
+echo "First Argument : $1"
+
+echo "Second Argument : $2"
+
+echo "Total Arguments : $#"
+
+Run
+
+./script.sh Sachin DevOps
+
+Output
+
+First Argument : Sachin
+
+Second Argument : DevOps
+Step 5 – If Else
+
+Create conditions.sh
+
+#!/bin/bash
+
+read -p "Enter Age : " AGE
+
+if [ $AGE -ge 18 ]
+then
+    echo "Eligible"
+else
+    echo "Not Eligible"
+fi
+Step 6 – Case Statement
+#!/bin/bash
+
+read -p "Choose Option (start|stop|restart): " OPTION
+
+case $OPTION in
+    start)
+        echo "Starting Service"
+        ;;
+    stop)
+        echo "Stopping Service"
+        ;;
+    restart)
+        echo "Restarting Service"
+        ;;
+    *)
+        echo "Invalid Option"
+        ;;
+esac
+Step 7 – For Loop
+
+Create loops.sh
+
+#!/bin/bash
+
+for i in {1..10}
+do
+    echo "Iteration $i"
+done
+Step 8 – While Loop
+#!/bin/bash
+
+COUNT=1
+
+while [ $COUNT -le 5 ]
+do
+    echo $COUNT
+    ((COUNT++))
+done
+Step 9 – Functions
+
+Create functions.sh
+
+#!/bin/bash
+
+greet(){
+
+echo "Welcome to DevOps"
+
+}
+
+greet
+Step 10 – Mini Project
+
+Create calculator.sh
+
+#!/bin/bash
+
+read -p "Enter First Number : " A
+
+read -p "Enter Second Number : " B
+
+echo "Addition : $((A+B))"
+
+echo "Subtraction : $((A-B))"
+
+echo "Multiplication : $((A*B))"
+
+echo "Division : $((A/B))"
+📖 Notes
+
+Create notes.md
+
+# Bash Scripting Notes
+
+#!/bin/bash
+
+Starts Bash interpreter
+
+Variables
+
+NAME="Sachin"
+
+Read Input
+
+read
+
+If Else
+
+if
+
+Case
+
+case
+
+For
+
+for
+
+While
+
+while
+
+Function
+
+function_name(){}
+
+Arguments
+
+$1
+
+$2
+
+$#
+
+Exit Code
+
+$?
+🧪 Lab Exercise
+
+Create a script named system-info.sh that prints:
+
+Current User
+Hostname
+Current Date
+Current Directory
+Linux Kernel Version
+Uptime
+Memory Usage
+Disk Usage
+
+Example:
+
+#!/bin/bash
+
+echo "User : $(whoami)"
+
+echo "Hostname : $(hostname)"
+
+echo "Date : $(date)"
+
+echo "Directory : $(pwd)"
+
+echo "Kernel : $(uname -r)"
+
+echo "Uptime"
+
+uptime
+
+echo "Memory"
+
+free -h
+
+echo "Disk"
+
+df -h
+🎯 Senior DevOps Challenge
+
+Create a script named server-health.sh that:
+
+Displays:
+Hostname
+IP Address
+Uptime
+CPU Usage
+Memory Usage
+Disk Usage
+Saves the report to server-health-report.txt.
+Prints a warning if any filesystem exceeds 80% usage.
+Returns exit code 1 if any filesystem exceeds 90% usage.
+
+This is similar to the kind of health check scripts used in production environments.
+
+📄 Interview Questions
+What is Bash?
+Difference between sh and bash?
+What is #!/bin/bash?
+How do you pass arguments to a Bash script?
+Difference between for and while loops?
+What is $??
+What are $1, $2, and $#?
+How do you define a function in Bash?
+How do you read user input?
+How do you make a script executable?
+📤 Git Commit
+git add .
+git commit -m "Day010 - Bash Scripting Fundamentals"
+git push origin main
+🎯 Skills You'll Gain Today
+
+By the end of Day 10, you'll be able to:
+
+Write and execute Bash scripts.
+Use variables, loops, conditions, and functions.
+Accept user input and command-line arguments.
+Build simple automation scripts.
+Create reusable tools for server administration.
