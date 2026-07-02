@@ -1,0 +1,245 @@
+Duration: 3–4 Hours
+
+Goal: Learn advanced Bash features such as arrays, string manipulation, file processing, logging, error handling, and build a production-ready automation script.
+
+📁 Repository Structure
+365-days-devops/
+└── Day011/
+    ├── README.md
+    ├── arrays.sh
+    ├── strings.sh
+    ├── file-reader.sh
+    ├── logger.sh
+    ├── backup.sh
+    ├── notes.md
+    ├── interview.md
+    ├── lab.md
+    ├── production-project/
+    │   ├── backup.sh
+    │   ├── logs/
+    │   └── backups/
+    └── screenshots/
+📚 Learning Objectives
+
+Today you'll learn:
+
+Arrays
+String Manipulation
+Reading Files
+Logging
+Error Handling
+Exit Codes
+Trap Signals
+Production Bash Standards
+🛠️ Step 1 – Arrays
+
+Create arrays.sh
+
+#!/bin/bash
+
+servers=("web01" "web02" "db01" "cache01")
+
+echo "Total Servers: ${#servers[@]}"
+
+echo "First Server: ${servers[0]}"
+
+echo "All Servers:"
+
+for server in "${servers[@]}"
+do
+    echo "$server"
+done
+
+Run:
+
+chmod +x arrays.sh
+./arrays.sh
+🛠️ Step 2 – String Operations
+
+Create strings.sh
+
+#!/bin/bash
+
+NAME="Senior DevOps Engineer"
+
+echo "Original : $NAME"
+
+echo "Length : ${#NAME}"
+
+echo "Upper : ${NAME^^}"
+
+echo "Lower : ${NAME,,}"
+
+echo "Replace : ${NAME/Engineer/Architect}"
+🛠️ Step 3 – Reading a File
+
+Create servers.txt
+
+web01
+web02
+db01
+cache01
+
+Create file-reader.sh
+
+#!/bin/bash
+
+while read server
+do
+    echo "Connecting to $server..."
+done < servers.txt
+🛠️ Step 4 – Logging
+
+Create logger.sh
+
+#!/bin/bash
+
+LOGFILE="application.log"
+
+echo "$(date) - Script Started" >> "$LOGFILE"
+
+echo "Checking system..."
+
+echo "$(date) - Completed Successfully" >> "$LOGFILE"
+🛠️ Step 5 – Error Handling
+#!/bin/bash
+
+FILE="/tmp/demo.txt"
+
+if [ -f "$FILE" ]
+then
+    echo "File exists."
+else
+    echo "File not found."
+    exit 1
+fi
+🛠️ Step 6 – Trap Signals
+#!/bin/bash
+
+trap "echo 'Script interrupted'; exit" SIGINT
+
+while true
+do
+    echo "Running..."
+    sleep 2
+done
+
+Press Ctrl + C to test the trap.
+
+💻 Mini Project – Backup Script
+
+Create backup.sh
+
+#!/bin/bash
+
+SOURCE="$HOME/Documents"
+DEST="$HOME/backups"
+
+mkdir -p "$DEST"
+
+tar -czf "$DEST/backup-$(date +%F-%H%M).tar.gz" "$SOURCE"
+
+echo "Backup Completed Successfully"
+🧪 Lab Exercise
+
+Create:
+
+production-project/
+├── backups/
+├── logs/
+└── backup.sh
+
+Requirements:
+
+Compress a folder.
+Save backups with timestamps.
+Write logs to logs/backup.log.
+Exit with an error if the source folder does not exist.
+🧠 Senior DevOps Challenge
+
+Create a script named health-monitor.sh that:
+
+Checks:
+CPU usage
+Memory usage
+Disk usage
+Writes all results to logs/health.log.
+If disk usage exceeds 80%, print a warning.
+If disk usage exceeds 90%, exit with code 1.
+Add timestamps to every log entry.
+
+Example log:
+
+2026-07-03 10:15:22 INFO Starting health check
+2026-07-03 10:15:22 INFO CPU Usage: 18%
+2026-07-03 10:15:22 INFO Memory Usage: 42%
+2026-07-03 10:15:22 WARNING Disk usage on / is 84%
+2026-07-03 10:15:22 INFO Health check completed
+📝 notes.md
+# Advanced Bash Notes
+
+Arrays:
+array=("a" "b")
+
+Length:
+${#array[@]}
+
+Loop:
+for item in "${array[@]}"
+
+Read File:
+while read line
+
+Logging:
+echo "$(date) Message" >> logfile
+
+Exit Codes:
+0 = Success
+1 = General Error
+
+Trap:
+trap "command" SIGINT
+📄 interview.md
+# Advanced Bash Interview Questions
+
+1. What are Bash arrays?
+2. How do you loop through an array?
+3. How do you read a file line by line?
+4. What is a trap?
+5. What is an exit code?
+6. Why are logs important?
+7. How do you redirect output to a file?
+8. What is stderr?
+9. Difference between > and >>?
+10. How do you handle script errors?
+11. What is tar used for?
+12. How do you schedule this script using cron?
+🔥 Production Scenario
+
+Problem: A nightly backup job completed, but no backup file was created.
+
+Investigation
+Check the log file:
+cat logs/backup.log
+Verify the source directory exists:
+ls -ld "$HOME/Documents"
+Check destination permissions:
+ls -ld "$HOME/backups"
+Test the tar command manually:
+tar -tzf backup-file.tar.gz
+Verify available disk space:
+df -h
+📤 Git Commit
+git add .
+git commit -m "Day011 - Advanced Bash Scripting"
+git push origin main
+🎯 Skills You'll Gain Today
+
+After completing Day 11, you'll be able to:
+
+Use arrays and string operations in Bash.
+Read and process files.
+Implement logging and error handling.
+Use traps to handle signals.
+Build production-ready automation scripts.
+Create timestamped backups with proper validation.
