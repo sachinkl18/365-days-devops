@@ -1,0 +1,320 @@
+Goal: Learn how to schedule and automate tasks using cron and crontab.
+
+📂 Repository Structure
+365-days-devops/
+└── Day012/
+    ├── README.md
+    ├── backup.sh
+    ├── health-check.sh
+    ├── cleanup.sh
+    ├── cron-examples.txt
+    ├── notes.md
+    ├── interview.md
+    ├── lab.md
+    ├── cron-setup.md
+    └── screenshots/
+📚 Learning Objectives
+
+Today you'll learn:
+
+What is Cron?
+What is Crontab?
+Cron Syntax
+Scheduling Jobs
+Redirecting Logs
+Environment Variables
+Automating Scripts
+Troubleshooting Cron Jobs
+📖 What is Cron?
+
+Cron is a Linux service that executes scheduled commands automatically.
+
+Examples:
+
+Daily backup
+Log cleanup
+Health monitoring
+Restart services
+Database backup
+SSL renewal
+🛠️ Task 1 – Check Cron Service
+
+Ubuntu/Debian:
+
+systemctl status cron
+
+CentOS/RHEL:
+
+systemctl status crond
+
+Start if stopped:
+
+sudo systemctl start cron
+
+Enable on boot:
+
+sudo systemctl enable cron
+🛠️ Task 2 – Open Crontab
+
+View:
+
+crontab -l
+
+Edit:
+
+crontab -e
+
+Remove all jobs:
+
+crontab -r
+📖 Cron Syntax
+* * * * * command
+│ │ │ │ │
+│ │ │ │ └── Day of Week (0-7)
+│ │ │ └──── Month (1-12)
+│ │ └────── Day (1-31)
+│ └──────── Hour (0-23)
+└────────── Minute (0-59)
+Common Examples
+
+Every minute
+
+* * * * * echo "Hello"
+
+Every 5 minutes
+
+*/5 * * * * command
+
+Daily at 2 AM
+
+0 2 * * * command
+
+Every Sunday at 1 AM
+
+0 1 * * 0 command
+
+Every Monday at 8 AM
+
+0 8 * * 1 command
+🛠️ Task 3 – First Cron Job
+
+Create:
+
+nano hello.sh
+#!/bin/bash
+
+echo "$(date) Hello DevOps" >> ~/hello.log
+
+Make executable:
+
+chmod +x hello.sh
+
+Add to cron:
+
+* * * * * /home/USERNAME/hello.sh
+
+Wait one minute.
+
+Check:
+
+cat ~/hello.log
+🛠️ Task 4 – Redirect Logs
+*/5 * * * * /home/USERNAME/backup.sh >> /home/USERNAME/backup.log 2>&1
+
+Explanation:
+
+>>
+Append output
+
+2>&1
+
+Redirect errors
+🛠️ Task 5 – Environment Variables
+
+Cron uses a limited environment.
+
+Always use full paths.
+
+Instead of:
+
+python
+
+Use:
+
+/usr/bin/python3
+
+Check command path:
+
+which python3
+🛠️ Task 6 – Automated Backup
+
+Create backup.sh
+
+#!/bin/bash
+
+SOURCE="$HOME/Documents"
+
+DEST="$HOME/backups"
+
+mkdir -p "$DEST"
+
+tar -czf "$DEST/backup-$(date +%F-%H%M).tar.gz" "$SOURCE"
+
+echo "$(date) Backup Completed" >> "$DEST/backup.log"
+
+Cron:
+
+0 2 * * * /home/USERNAME/backup.sh
+🛠️ Task 7 – Health Check
+
+Create health-check.sh
+
+#!/bin/bash
+
+echo "===== $(date) =====" >> ~/health.log
+
+df -h >> ~/health.log
+
+free -h >> ~/health.log
+
+uptime >> ~/health.log
+
+Run every 30 minutes:
+
+*/30 * * * * /home/USERNAME/health-check.sh
+🛠️ Task 8 – Cleanup Script
+
+Create cleanup.sh
+
+#!/bin/bash
+
+find ~/Downloads -type f -mtime +30 -delete
+
+echo "$(date) Cleanup Completed" >> ~/cleanup.log
+
+Run weekly:
+
+0 3 * * 0 /home/USERNAME/cleanup.sh
+📝 notes.md
+# Cron Notes
+
+crontab -e
+
+Edit cron jobs
+
+crontab -l
+
+List cron jobs
+
+crontab -r
+
+Delete cron jobs
+
+*/5
+
+Every 5 minutes
+
+0 2 * * *
+
+Daily 2 AM
+
+2>&1
+
+Redirect stderr
+🧪 Lab Exercise
+
+Schedule:
+
+Print date every minute.
+Run backup every day at 1 AM.
+Run cleanup every Sunday.
+Save logs to cron.log.
+Verify jobs using crontab -l.
+📄 interview.md
+# Cron Interview Questions
+
+1. What is cron?
+
+2. Difference between cron and crontab?
+
+3. Explain cron syntax.
+
+4. What does */10 mean?
+
+5. How do you redirect logs?
+
+6. Why use absolute paths?
+
+7. How do you troubleshoot cron jobs?
+
+8. Where are cron logs stored?
+
+9. Difference between cron.daily and crontab?
+
+10. How do you schedule a reboot?
+🔥 Production Scenario
+
+Problem: Nightly backup cron job didn't run.
+
+Investigation
+
+Check cron service:
+
+systemctl status cron
+
+Verify cron jobs:
+
+crontab -l
+
+Check permissions:
+
+ls -l backup.sh
+
+Verify executable:
+
+chmod +x backup.sh
+
+Review cron logs:
+
+Ubuntu:
+
+grep CRON /var/log/syslog
+
+RHEL:
+
+grep CRON /var/log/cron
+
+Test the script manually:
+
+./backup.sh
+💼 Senior DevOps Challenge
+
+Create a script named daily-server-report.sh that:
+
+Generates:
+Hostname
+Current Date
+CPU Usage
+Memory Usage
+Disk Usage
+Top 10 CPU-consuming processes
+Top 10 memory-consuming processes
+Saves the report to ~/reports/.
+Creates the directory if it doesn't exist.
+Names the report server-report-YYYY-MM-DD-HHMM.txt.
+Schedule it to run every day at 6:00 AM using cron.
+Redirect both standard output and errors to ~/reports/server-report.log.
+📤 Git Commit
+git add .
+git commit -m "Day012 - Cron Jobs and Task Automation"
+git push origin main
+🎯 Skills You'll Gain Today
+
+By completing Day 12, you'll be able to:
+
+Create and manage cron jobs.
+Understand cron scheduling syntax.
+Automate recurring system tasks.
+Redirect logs and handle errors.
+Troubleshoot cron execution issues.
+Schedule production-ready maintenance and monitoring scripts.
