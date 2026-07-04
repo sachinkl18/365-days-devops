@@ -1,0 +1,18 @@
+Duration: 3–4 Hours
+
+Goal: Learn how to securely access, manage, and automate remote Linux servers using SSH.
+
+📂 Repository Structure
+365-days-devops/
+└── Day013/
+    ├── README.md
+    ├── commands.sh
+    ├── ssh-key-setup.sh
+    ├── remote-backup.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    ├── config/
+    │   └── ssh_config
+    └── screenshots/
