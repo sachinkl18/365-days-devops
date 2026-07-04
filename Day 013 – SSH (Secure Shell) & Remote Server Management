@@ -66,3 +66,261 @@ hostname -I
 or
 
 ip addr
+Task 3 – Connect to Remote Server
+ssh username@server-ip
+
+Example
+
+ssh ubuntu@192.168.1.100
+
+Exit
+
+exit
+🛠️ Task 4 – Generate SSH Key
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+If Ed25519 isn't supported:
+
+ssh-keygen -t rsa -b 4096
+
+Keys are stored in:
+
+~/.ssh/
+
+Check:
+
+ls ~/.ssh
+🛠️ Task 5 – Copy SSH Key
+
+Automatic:
+
+ssh-copy-id username@server-ip
+
+Manual:
+
+cat ~/.ssh/id_ed25519.pub
+
+Append the key to:
+
+~/.ssh/authorized_keys
+
+on the remote server.
+
+🛠️ Task 6 – Login Without Password
+ssh username@server-ip
+
+If configured correctly, no password is required.
+
+🛠️ Task 7 – SSH Config
+
+Create:
+
+nano ~/.ssh/config
+
+Example
+
+Host dev-server
+    HostName 192.168.1.100
+    User ubuntu
+    IdentityFile ~/.ssh/id_ed25519
+
+Now connect using:
+
+ssh dev-server
+🛠️ Task 8 – Copy Files
+
+Upload:
+
+scp backup.tar.gz ubuntu@server-ip:/home/ubuntu/
+
+Download:
+
+scp ubuntu@server-ip:/var/log/syslog .
+🛠️ Task 9 – Execute Remote Commands
+ssh ubuntu@server-ip "uptime"
+
+Another example:
+
+ssh ubuntu@server-ip "df -h"
+🛠️ Task 10 – SSH Agent
+
+Start:
+
+eval "$(ssh-agent -s)"
+
+Add key:
+
+ssh-add ~/.ssh/id_ed25519
+
+List keys:
+
+ssh-add -l
+🔒 SSH Security Best Practices
+
+Edit:
+
+sudo nano /etc/ssh/sshd_config
+
+Recommended settings:
+
+PermitRootLogin no
+
+PasswordAuthentication no
+
+PubkeyAuthentication yes
+
+MaxAuthTries 3
+
+PermitEmptyPasswords no
+
+Restart:
+
+sudo systemctl restart ssh
+💻 commands.sh
+#!/bin/bash
+
+echo "===== SSH Service ====="
+systemctl status ssh --no-pager
+
+echo ""
+
+echo "===== SSH Keys ====="
+ls -la ~/.ssh
+
+echo ""
+
+echo "===== SSH Agent ====="
+ssh-add -l
+
+echo ""
+
+echo "===== Network ====="
+hostname -I
+💻 Mini Project – Remote Backup
+
+Create remote-backup.sh
+
+#!/bin/bash
+
+REMOTE="ubuntu@192.168.1.100"
+
+DEST="/home/ubuntu/backups"
+
+FILE="/etc/hosts"
+
+scp "$FILE" "$REMOTE:$DEST"
+
+echo "Backup completed."
+🧪 Lab Exercise
+
+Using two Linux VMs (or your host and a VM):
+
+Install OpenSSH Server.
+Generate SSH keys.
+Configure passwordless login.
+Copy a file using scp.
+Run df -h remotely.
+Verify SSH agent usage.
+📝 notes.md
+# SSH Notes
+
+ssh user@host
+Connect to a remote server
+
+ssh-keygen
+Generate SSH keys
+
+ssh-copy-id
+Copy public key to remote server
+
+scp
+Securely copy files
+
+ssh-agent
+Store private keys in memory
+
+ssh-add
+Add keys to the SSH agent
+
+~/.ssh/config
+SSH client configuration
+📄 interview.md
+# SSH Interview Questions
+
+1. What is SSH?
+2. Difference between SSH and Telnet?
+3. What is SSH key authentication?
+4. Difference between RSA and Ed25519 keys?
+5. What is ssh-agent?
+6. What is authorized_keys?
+7. What is known_hosts?
+8. How do you disable password login?
+9. What is SCP?
+10. Difference between SCP and SFTP?
+11. How do you execute a remote command using SSH?
+12. How do you troubleshoot an SSH connection failure?
+🔥 Production Scenario
+
+Problem: You cannot SSH into a production server.
+
+Investigation
+
+Check if the SSH service is running:
+
+sudo systemctl status ssh
+
+Verify port 22 is listening:
+
+ss -tuln | grep :22
+
+Check firewall rules:
+
+sudo ufw status
+
+Review SSH logs:
+
+Ubuntu:
+
+sudo journalctl -u ssh
+
+or
+
+sudo tail -f /var/log/auth.log
+
+Verify the user's .ssh directory permissions:
+
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+
+Test with verbose output:
+
+ssh -vvv username@server-ip
+🧠 Senior DevOps Challenge
+
+Create a script named multi-server-check.sh that:
+
+Reads server names or IPs from a file named servers.txt.
+Connects to each server using SSH.
+Executes:
+hostname
+uptime
+df -h
+free -h
+Saves the output to reports/<server>-report.txt.
+Logs connection failures to failed-servers.log.
+Continues processing even if one server is unreachable.
+📤 Git Commit
+git add .
+git commit -m "Day013 - SSH and Remote Server Management"
+git push origin main
+🎯 Skills You'll Gain Today
+
+By completing Day 13, you'll be able to:
+
+Connect securely to remote Linux servers.
+Configure SSH key-based authentication.
+Transfer files with scp.
+Execute remote commands over SSH.
+Harden SSH for production use.
+Troubleshoot common SSH connectivity issues.
+Automate administration across multiple servers.
