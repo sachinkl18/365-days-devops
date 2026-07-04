@@ -16,3 +16,53 @@ Goal: Learn how to securely access, manage, and automate remote Linux servers us
     ├── config/
     │   └── ssh_config
     └── screenshots/
+🎯 Learning Objectives
+
+Today you'll learn:
+
+SSH Basics
+SSH Authentication
+Password Authentication
+SSH Key Authentication
+Public & Private Keys
+SCP
+SFTP
+SSH Config File
+SSH Agent
+SSH Hardening
+Remote Command Execution
+📖 Theory
+What is SSH?
+
+SSH (Secure Shell) is a secure protocol used to connect to remote Linux servers.
+
+Example:
+
+Laptop
+    │
+    │ SSH
+    ▼
+Ubuntu Server
+
+Default SSH Port:
+
+22
+🛠️ Task 1 – Check SSH Status
+
+Ubuntu
+
+sudo systemctl status ssh
+
+Start SSH
+
+sudo systemctl start ssh
+
+Enable at boot
+
+sudo systemctl enable ssh
+🛠️ Task 2 – Find Your IP
+hostname -I
+
+or
+
+ip addr
