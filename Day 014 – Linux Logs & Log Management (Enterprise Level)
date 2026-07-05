@@ -68,3 +68,250 @@ sudo journalctl -b
 Previous boot:
 
 sudo journalctl -b -1
+🛠️ Task 2 – View Authentication Logs
+
+Ubuntu:
+
+sudo tail -50 /var/log/auth.log
+
+Search failed logins:
+
+grep "Failed" /var/log/auth.log
+🛠️ Task 3 – Read Log Files
+
+Last 20 lines:
+
+tail -20 /var/log/syslog
+
+First 20 lines:
+
+head -20 /var/log/syslog
+
+Interactive viewer:
+
+less /var/log/syslog
+🛠️ Task 4 – Search Logs
+
+Search for "error":
+
+grep -i error /var/log/syslog
+
+Count errors:
+
+grep -i error /var/log/syslog | wc -l
+
+Search multiple patterns:
+
+grep -Ei "error|failed|warning" /var/log/syslog
+🛠️ Task 5 – Using awk
+
+Show first column:
+
+awk '{print $1}' /var/log/syslog | head
+
+Print first three columns:
+
+awk '{print $1,$2,$3}' /var/log/syslog | head
+🛠️ Task 6 – Using sed
+
+Display first 20 lines:
+
+sed -n '1,20p' /var/log/syslog
+
+Replace text (example):
+
+echo "DevOps Engineer" | sed 's/Engineer/Architect/'
+🛠️ Task 7 – Kernel Messages
+dmesg
+
+USB devices:
+
+dmesg | grep -i usb
+
+Errors:
+
+dmesg | grep -i error
+🛠️ Task 8 – Log Rotation
+
+Check configuration:
+
+cat /etc/logrotate.conf
+
+View rules:
+
+ls /etc/logrotate.d
+
+Test rotation:
+
+sudo logrotate -d /etc/logrotate.conf
+
+Force rotation:
+
+sudo logrotate -f /etc/logrotate.conf
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Last 20 System Logs ====="
+sudo journalctl -n 20
+
+echo ""
+
+echo "===== Failed Login Attempts ====="
+sudo grep "Failed" /var/log/auth.log
+
+echo ""
+
+echo "===== Last Boot ====="
+sudo journalctl -b
+
+echo ""
+
+echo "===== Kernel Errors ====="
+dmesg | grep -i error
+
+Run:
+
+chmod +x commands.sh
+./commands.sh
+💻 Mini Project – Log Analyzer
+
+Create log-analyzer.sh
+
+#!/bin/bash
+
+LOG="/var/log/syslog"
+
+echo "===== Log Analysis ====="
+
+echo "Total Lines:"
+wc -l "$LOG"
+
+echo ""
+
+echo "Errors:"
+grep -ic error "$LOG"
+
+echo ""
+
+echo "Warnings:"
+grep -ic warning "$LOG"
+
+echo ""
+
+echo "Failed:"
+grep -ic failed "$LOG"
+🧪 Lab Exercise
+View the last 100 log entries.
+Find all failed login attempts.
+Search for the word "error".
+Count the number of warnings.
+Save all error lines to errors.log.
+
+Commands:
+
+sudo journalctl -n 100
+grep -i error /var/log/syslog > errors.log
+📝 notes.md
+# Linux Log Management
+
+journalctl
+Systemd logs
+
+tail
+View last lines
+
+head
+View first lines
+
+less
+Interactive log viewing
+
+grep
+Search text
+
+awk
+Column processing
+
+sed
+Text editing
+
+dmesg
+Kernel messages
+
+logrotate
+Rotate logs
+📄 interview.md
+# Linux Logs Interview Questions
+
+1. What is journalctl?
+2. Difference between syslog and journalctl?
+3. Where are authentication logs stored?
+4. What is logrotate?
+5. Difference between tail and less?
+6. What is dmesg?
+7. How do you search for errors in logs?
+8. How do you monitor logs in real time?
+9. How do you check previous boot logs?
+10. Why is log rotation important?
+11. What does grep -i do?
+12. How would you troubleshoot an application using logs?
+🔥 Production Scenario
+Problem
+
+An Nginx website returns 502 Bad Gateway.
+
+Investigation
+
+Check service:
+
+sudo systemctl status nginx
+
+View logs:
+
+sudo journalctl -u nginx
+
+Nginx error log:
+
+sudo tail -50 /var/log/nginx/error.log
+
+Nginx access log:
+
+sudo tail -50 /var/log/nginx/access.log
+
+If using PHP-FPM:
+
+sudo systemctl status php8.3-fpm
+sudo journalctl -u php8.3-fpm
+
+Verify ports:
+
+ss -tuln
+🧠 Senior DevOps Challenge
+
+Create a script named production-log-monitor.sh that:
+
+Monitors /var/log/syslog.
+Counts:
+Errors
+Warnings
+Failed logins
+Saves the results to daily-log-report.txt.
+If error count exceeds 100, print "Critical Alert".
+If failed logins exceed 10, print "Possible Brute Force Attack".
+Add timestamps to the report.
+Schedule the script with cron to run every hour.
+📤 Git Commit
+git add .
+git commit -m "Day014 - Linux Logs and Log Management"
+git push origin main
+🎯 Skills You'll Gain Today
+
+By completing Day 14, you'll be able to:
+
+Read and analyze Linux system logs.
+Use journalctl effectively.
+Search and filter logs with grep, awk, and sed.
+Investigate authentication and kernel logs.
+Configure and test log rotation.
+Build automated log analysis scripts.
+Troubleshoot production issues using logs.
