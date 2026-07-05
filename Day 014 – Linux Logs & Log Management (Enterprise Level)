@@ -1,0 +1,21 @@
+Difficulty: ⭐⭐⭐⭐⭐ (5/5)
+
+Duration: 3–4 Hours
+
+Goal: Learn how to locate, analyze, filter, rotate, and troubleshoot Linux logs in production.
+
+📂 Repository Structure
+365-days-devops/
+└── Day014/
+    ├── README.md
+    ├── commands.sh
+    ├── log-monitor.sh
+    ├── log-analyzer.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    ├── sample-logs/
+    │   ├── application.log
+    │   └── nginx.log
+    └── screenshots/
