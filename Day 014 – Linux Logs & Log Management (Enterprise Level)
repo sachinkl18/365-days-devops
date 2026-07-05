@@ -19,3 +19,52 @@ Goal: Learn how to locate, analyze, filter, rotate, and troubleshoot Linux logs 
     │   ├── application.log
     │   └── nginx.log
     └── screenshots/
+🎯 Learning Objectives
+
+By the end of today you'll know:
+
+Linux Logging System
+journalctl
+rsyslog
+syslog
+auth.log
+kern.log
+dmesg
+Log Rotation
+grep
+awk
+sed
+tail
+head
+less
+📖 Important Log Files
+
+Ubuntu:
+
+/var/log/syslog
+/var/log/auth.log
+/var/log/kern.log
+/var/log/dpkg.log
+/var/log/boot.log
+
+Systemd Journal:
+
+journalctl
+🛠️ Task 1 – View System Logs
+sudo journalctl
+
+Latest 50 entries:
+
+sudo journalctl -n 50
+
+Follow logs live:
+
+sudo journalctl -f
+
+Current boot:
+
+sudo journalctl -b
+
+Previous boot:
+
+sudo journalctl -b -1
