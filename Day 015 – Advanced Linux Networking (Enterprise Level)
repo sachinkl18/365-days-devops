@@ -1,0 +1,88 @@
+Duration: 4–5 Hours
+
+Goal: Learn to troubleshoot network issues, analyze packets, inspect routing, and use networking tools like a production DevOps engineer.
+
+📂 Repository Structure
+365-days-devops/
+└── Day015/
+    ├── README.md
+    ├── commands.sh
+    ├── network-health.sh
+    ├── packet-capture.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    ├── reports/
+    └── screenshots/
+🎯 Learning Objectives
+
+Today you'll learn:
+
+OSI Model
+TCP/IP Model
+Static vs Dynamic IP
+Network Interfaces
+Routing Table
+DNS Troubleshooting
+Network Ports
+TCP vs UDP
+tcpdump
+netcat (nc)
+curl
+wget
+traceroute
+mtr
+iperf3
+Network Performance Analysis          
+Theory
+OSI Model (Remember This for Interviews)
+Layer	Name	Example
+7	Application	HTTP, HTTPS
+6	Presentation	SSL/TLS
+5	Session	NetBIOS
+4	Transport	TCP, UDP
+3	Network	IP
+2	Data Link	MAC
+1	Physical	Cable
+
+Mnemonic:
+All People Seem To Need Data Processing
+
+🛠️ Task 1 – Network Interfaces
+
+Show interfaces:
+
+ip addr
+
+or
+
+ip a
+
+Show link status:
+
+ip link
+🛠️ Task 2 – Routing Table
+ip route
+
+or
+
+route -n
+
+Default gateway:
+
+ip route | grep default
+🛠️ Task 3 – DNS Troubleshooting
+
+Check DNS:
+
+cat /etc/resolv.conf
+
+Lookup:
+
+nslookup google.com
+dig google.com
+
+Reverse lookup:
+
+dig -x 8.8.8.8
