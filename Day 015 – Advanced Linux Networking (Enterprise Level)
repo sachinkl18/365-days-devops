@@ -86,3 +86,998 @@ dig google.com
 Reverse lookup:
 
 dig -x 8.8.8.8
+🛠️ Task 3 – Connect to Remote Server
+ssh username@server-ip
+
+Example
+
+ssh ubuntu@192.168.1.100
+
+Exit
+
+exit
+🛠️ Task 4 – Generate SSH Key
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+If Ed25519 isn't supported:
+
+ssh-keygen -t rsa -b 4096
+
+Keys are stored in:
+
+~/.ssh/
+
+Check:
+
+ls ~/.ssh
+🛠️ Task 5 – Copy SSH Key
+
+Automatic:
+
+ssh-copy-id username@server-ip
+
+Manual:
+
+cat ~/.ssh/id_ed25519.pub
+
+Append the key to:
+
+~/.ssh/authorized_keys
+
+on the remote server.
+
+🛠️ Task 6 – Login Without Password
+ssh username@server-ip
+
+If configured correctly, no password is required.
+
+🛠️ Task 7 – SSH Config
+
+Create:
+
+nano ~/.ssh/config
+
+Example
+
+Host dev-server
+    HostName 192.168.1.100
+    User ubuntu
+    IdentityFile ~/.ssh/id_ed25519
+
+Now connect using:
+
+ssh dev-server
+🛠️ Task 8 – Copy Files
+
+Upload:
+
+scp backup.tar.gz ubuntu@server-ip:/home/ubuntu/
+
+Download:
+
+scp ubuntu@server-ip:/var/log/syslog .
+🛠️ Task 9 – Execute Remote Commands
+ssh ubuntu@server-ip "uptime"
+
+Another example:
+
+ssh ubuntu@server-ip "df -h"
+🛠️ Task 10 – SSH Agent
+
+Start:
+
+eval "$(ssh-agent -s)"
+
+Add key:
+
+ssh-add ~/.ssh/id_ed25519
+
+List keys:
+
+ssh-add -l
+🔒 SSH Security Best Practices
+
+Edit:
+
+sudo nano /etc/ssh/sshd_config
+
+Recommended settings:
+
+PermitRootLogin no
+
+PasswordAuthentication no
+
+PubkeyAuthentication yes
+
+MaxAuthTries 3
+
+PermitEmptyPasswords no
+
+Restart:
+
+sudo systemctl restart ssh
+💻 commands.sh
+#!/bin/bash
+
+echo "===== SSH Service ====="
+systemctl status ssh --no-pager
+
+echo ""
+
+echo "===== SSH Keys ====="
+ls -la ~/.ssh
+
+echo ""
+
+echo "===== SSH Agent ====="
+ssh-add -l
+
+echo ""
+
+echo "===== Network ====="
+hostname -I
+💻 Mini Project – Remote Backup
+
+Create remote-backup.sh
+
+#!/bin/bash
+
+REMOTE="ubuntu@192.168.1.100"
+
+DEST="/home/ubuntu/backups"
+
+FILE="/etc/hosts"
+
+scp "$FILE" "$REMOTE:$DEST"
+
+echo "Backup completed."
+🧪 Lab Exercise
+
+Using two Linux VMs (or your host and a VM):
+
+Install OpenSSH Server.
+Generate SSH keys.
+Configure passwordless login.
+Copy a file using scp.
+Run df -h remotely.
+Verify SSH agent usage.
+📝 notes.md
+# SSH Notes
+
+ssh user@host
+Connect to a remote server
+
+ssh-keygen
+Generate SSH keys
+
+ssh-copy-id
+Copy public key to remote server
+
+scp
+Securely copy files
+
+ssh-agent
+Store private keys in memory
+
+ssh-add
+Add keys to the SSH agent
+
+~/.ssh/config
+SSH client configuration
+📄 interview.md
+# SSH Interview Questions
+
+1. What is SSH?
+2. Difference between SSH and Telnet?
+3. What is SSH key authentication?
+4. Difference between RSA and Ed25519 keys?
+5. What is ssh-agent?
+6. What is authorized_keys?
+7. What is known_hosts?
+8. How do you disable password login?
+9. What is SCP?
+10. Difference between SCP and SFTP?
+11. How do you execute a remote command using SSH?
+12. How do you troubleshoot an SSH connection failure?
+🔥 Production Scenario
+
+Problem: You cannot SSH into a production server.
+
+Investigation
+
+Check if the SSH service is running:
+
+sudo systemctl status ssh
+
+Verify port 22 is listening:
+
+ss -tuln | grep :22
+
+Check firewall rules:
+
+sudo ufw status
+
+Review SSH logs:
+
+Ubuntu:
+
+sudo journalctl -u ssh
+
+or
+
+sudo tail -f /var/log/auth.log
+
+Verify the user's .ssh directory permissions:
+
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+
+Test with verbose output:
+
+ssh -vvv username@server-ip
+🧠 Senior DevOps Challenge
+
+Create a script named multi-server-check.sh that:
+
+Reads server names or IPs from a file named servers.txt.
+Connects to each server using SSH.
+Executes:
+hostname
+uptime
+df -h
+free -h
+Saves the output to reports/<server>-report.txt.
+Logs connection failures to failed-servers.log.
+Continues processing even if one server is unreachable.
+📤 Git Commit
+git add .
+git commit -m "Day013 - SSH and Remote Server Management"
+git push origin main
+🎯 Skills You'll Gain Today
+
+By completing Day 13, you'll be able to:
+
+Connect securely to remote Linux servers.
+Configure SSH key-based authentication.
+Transfer files with scp.
+Execute remote commands over SSH.
+Harden SSH for production use.
+Troubleshoot common SSH connectivity issues.
+Automate administration across multiple servers.
+🚀 Day 014 Preview
+
+Tomorrow you'll learn Linux Logs & Log Management, including:
+
+journalctl
+/var/log
+syslog
+auth.log
+dmesg
+tail, head, less
+grep, awk, sed
+Log rotation with logrotate
+Production log analysis
+Building a log monitoring script
+
+This is one of the most valuable skills for debugging production issues and is frequently tested in Senior DevOps interviews.
+
+next day
+
+Excellent, Sachin! 🎉
+
+You're now on Day 014. Today you'll learn one of the most important skills for a Senior DevOps Engineer: Linux Logs & Log Management. When applications fail in production, logs are often the first place to investigate.
+
+🚀 Day 014 – Linux Logs & Log Management (Enterprise Level)
+
+Difficulty: ⭐⭐⭐⭐⭐ (5/5)
+
+Duration: 3–4 Hours
+
+Goal: Learn how to locate, analyze, filter, rotate, and troubleshoot Linux logs in production.
+
+📂 Repository Structure
+365-days-devops/
+└── Day014/
+    ├── README.md
+    ├── commands.sh
+    ├── log-monitor.sh
+    ├── log-analyzer.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    ├── sample-logs/
+    │   ├── application.log
+    │   └── nginx.log
+    └── screenshots/
+🎯 Learning Objectives
+
+By the end of today you'll know:
+
+Linux Logging System
+journalctl
+rsyslog
+syslog
+auth.log
+kern.log
+dmesg
+Log Rotation
+grep
+awk
+sed
+tail
+head
+less
+📖 Important Log Files
+
+Ubuntu:
+
+/var/log/syslog
+/var/log/auth.log
+/var/log/kern.log
+/var/log/dpkg.log
+/var/log/boot.log
+
+Systemd Journal:
+
+journalctl
+🛠️ Task 1 – View System Logs
+sudo journalctl
+
+Latest 50 entries:
+
+sudo journalctl -n 50
+
+Follow logs live:
+
+sudo journalctl -f
+
+Current boot:
+
+sudo journalctl -b
+
+Previous boot:
+
+sudo journalctl -b -1
+🛠️ Task 2 – View Authentication Logs
+
+Ubuntu:
+
+sudo tail -50 /var/log/auth.log
+
+Search failed logins:
+
+grep "Failed" /var/log/auth.log
+🛠️ Task 3 – Read Log Files
+
+Last 20 lines:
+
+tail -20 /var/log/syslog
+
+First 20 lines:
+
+head -20 /var/log/syslog
+
+Interactive viewer:
+
+less /var/log/syslog
+🛠️ Task 4 – Search Logs
+
+Search for "error":
+
+grep -i error /var/log/syslog
+
+Count errors:
+
+grep -i error /var/log/syslog | wc -l
+
+Search multiple patterns:
+
+grep -Ei "error|failed|warning" /var/log/syslog
+🛠️ Task 5 – Using awk
+
+Show first column:
+
+awk '{print $1}' /var/log/syslog | head
+
+Print first three columns:
+
+awk '{print $1,$2,$3}' /var/log/syslog | head
+🛠️ Task 6 – Using sed
+
+Display first 20 lines:
+
+sed -n '1,20p' /var/log/syslog
+
+Replace text (example):
+
+echo "DevOps Engineer" | sed 's/Engineer/Architect/'
+🛠️ Task 7 – Kernel Messages
+dmesg
+
+USB devices:
+
+dmesg | grep -i usb
+
+Errors:
+
+dmesg | grep -i error
+🛠️ Task 8 – Log Rotation
+
+Check configuration:
+
+cat /etc/logrotate.conf
+
+View rules:
+
+ls /etc/logrotate.d
+
+Test rotation:
+
+sudo logrotate -d /etc/logrotate.conf
+
+Force rotation:
+
+sudo logrotate -f /etc/logrotate.conf
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Last 20 System Logs ====="
+sudo journalctl -n 20
+
+echo ""
+
+echo "===== Failed Login Attempts ====="
+sudo grep "Failed" /var/log/auth.log
+
+echo ""
+
+echo "===== Last Boot ====="
+sudo journalctl -b
+
+echo ""
+
+echo "===== Kernel Errors ====="
+dmesg | grep -i error
+
+Run:
+
+chmod +x commands.sh
+./commands.sh
+💻 Mini Project – Log Analyzer
+
+Create log-analyzer.sh
+
+#!/bin/bash
+
+LOG="/var/log/syslog"
+
+echo "===== Log Analysis ====="
+
+echo "Total Lines:"
+wc -l "$LOG"
+
+echo ""
+
+echo "Errors:"
+grep -ic error "$LOG"
+
+echo ""
+
+echo "Warnings:"
+grep -ic warning "$LOG"
+
+echo ""
+
+echo "Failed:"
+grep -ic failed "$LOG"
+🧪 Lab Exercise
+View the last 100 log entries.
+Find all failed login attempts.
+Search for the word "error".
+Count the number of warnings.
+Save all error lines to errors.log.
+
+Commands:
+
+sudo journalctl -n 100
+grep -i error /var/log/syslog > errors.log
+📝 notes.md
+# Linux Log Management
+
+journalctl
+Systemd logs
+
+tail
+View last lines
+
+head
+View first lines
+
+less
+Interactive log viewing
+
+grep
+Search text
+
+awk
+Column processing
+
+sed
+Text editing
+
+dmesg
+Kernel messages
+
+logrotate
+Rotate logs
+📄 interview.md
+# Linux Logs Interview Questions
+
+1. What is journalctl?
+2. Difference between syslog and journalctl?
+3. Where are authentication logs stored?
+4. What is logrotate?
+5. Difference between tail and less?
+6. What is dmesg?
+7. How do you search for errors in logs?
+8. How do you monitor logs in real time?
+9. How do you check previous boot logs?
+10. Why is log rotation important?
+11. What does grep -i do?
+12. How would you troubleshoot an application using logs?
+🔥 Production Scenario
+Problem
+
+An Nginx website returns 502 Bad Gateway.
+
+Investigation
+
+Check service:
+
+sudo systemctl status nginx
+
+View logs:
+
+sudo journalctl -u nginx
+
+Nginx error log:
+
+sudo tail -50 /var/log/nginx/error.log
+
+Nginx access log:
+
+sudo tail -50 /var/log/nginx/access.log
+
+If using PHP-FPM:
+
+sudo systemctl status php8.3-fpm
+sudo journalctl -u php8.3-fpm
+
+Verify ports:
+
+ss -tuln
+🧠 Senior DevOps Challenge
+
+Create a script named production-log-monitor.sh that:
+
+Monitors /var/log/syslog.
+Counts:
+Errors
+Warnings
+Failed logins
+Saves the results to daily-log-report.txt.
+If error count exceeds 100, print "Critical Alert".
+If failed logins exceed 10, print "Possible Brute Force Attack".
+Add timestamps to the report.
+Schedule the script with cron to run every hour.
+📤 Git Commit
+git add .
+git commit -m "Day014 - Linux Logs and Log Management"
+git push origin main
+🎯 Skills You'll Gain Today
+
+By completing Day 14, you'll be able to:
+
+Read and analyze Linux system logs.
+Use journalctl effectively.
+Search and filter logs with grep, awk, and sed.
+Investigate authentication and kernel logs.
+Configure and test log rotation.
+Build automated log analysis scripts.
+Troubleshoot production issues using logs.
+🚀 Day 015 Preview
+
+Tomorrow you'll learn Linux Networking Advanced, including:
+
+Network interfaces
+Static vs Dynamic IP
+DNS troubleshooting
+Routing tables
+tcpdump
+netcat
+curl and wget
+iperf3
+Packet analysis
+Production network troubleshooting
+Real-world DevOps networking labs
+
+This is one of the highest-value topics for Senior DevOps Engineers because network issues are among the most common causes of production outages.
+
+next day
+
+Excellent, Sachin! 🔥
+
+You've completed 14 days of Linux fundamentals. Today we'll learn Advanced Linux Networking, one of the most important topics for Senior DevOps Engineers, Cloud Engineers, and SREs.
+
+🚀 Day 015 – Advanced Linux Networking (Enterprise Level)
+
+Difficulty: ⭐⭐⭐⭐⭐ (5/5)
+
+Duration: 4–5 Hours
+
+Goal: Learn to troubleshoot network issues, analyze packets, inspect routing, and use networking tools like a production DevOps engineer.
+
+📂 Repository Structure
+365-days-devops/
+└── Day015/
+    ├── README.md
+    ├── commands.sh
+    ├── network-health.sh
+    ├── packet-capture.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    ├── reports/
+    └── screenshots/
+🎯 Learning Objectives
+
+Today you'll learn:
+
+OSI Model
+TCP/IP Model
+Static vs Dynamic IP
+Network Interfaces
+Routing Table
+DNS Troubleshooting
+Network Ports
+TCP vs UDP
+tcpdump
+netcat (nc)
+curl
+wget
+traceroute
+mtr
+iperf3
+Network Performance Analysis
+📖 Theory
+OSI Model (Remember This for Interviews)
+Layer	Name	Example
+7	Application	HTTP, HTTPS
+6	Presentation	SSL/TLS
+5	Session	NetBIOS
+4	Transport	TCP, UDP
+3	Network	IP
+2	Data Link	MAC
+1	Physical	Cable
+
+Mnemonic:
+All People Seem To Need Data Processing
+
+🛠️ Task 1 – Network Interfaces
+
+Show interfaces:
+
+ip addr
+
+or
+
+ip a
+
+Show link status:
+
+ip link
+🛠️ Task 2 – Routing Table
+ip route
+
+or
+
+route -n
+
+Default gateway:
+
+ip route | grep default
+🛠️ Task 3 – DNS Troubleshooting
+
+Check DNS:
+
+cat /etc/resolv.conf
+
+Lookup:
+
+nslookup google.com
+dig google.com
+
+Reverse lookup:
+
+dig -x 8.8.8.8
+🛠️ Task 4 – Network Connectivity
+
+Ping
+
+ping google.com
+
+Gateway
+
+ping <gateway-ip>
+
+Check latency
+
+ping -c 10 8.8.8.8
+🛠️ Task 5 – Traceroute
+
+Install:
+
+sudo apt install traceroute
+
+Run:
+
+traceroute google.com
+
+Alternative:
+
+tracepath google.com
+🛠️ Task 6 – Check Open Ports
+ss -tulnp
+
+or
+
+netstat -tulnp
+🛠️ Task 7 – Test Ports
+
+Example:
+
+nc -zv google.com 443
+
+Test SSH:
+
+nc -zv localhost 22
+🛠️ Task 8 – HTTP Testing
+
+Headers:
+
+curl -I https://google.com
+
+Download:
+
+wget https://example.com
+
+Measure response:
+
+curl -o /dev/null -s -w "%{time_total}\n" https://google.com
+🛠️ Task 9 – Packet Capture
+
+Install:
+
+sudo apt install tcpdump
+
+Capture:
+
+sudo tcpdump
+
+Capture on interface:
+
+sudo tcpdump -i eth0
+
+Capture HTTP:
+
+sudo tcpdump port 80
+
+Save packets:
+
+sudo tcpdump -w capture.pcap
+
+Read:
+
+sudo tcpdump -r capture.pcap
+🛠️ Task 10 – Network Speed
+
+Install:
+
+sudo apt install iperf3
+
+Server:
+
+iperf3 -s
+
+Client:
+
+iperf3 -c SERVER-IP
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Interfaces ====="
+ip addr
+
+echo ""
+echo "===== Routes ====="
+ip route
+
+echo ""
+echo "===== DNS ====="
+cat /etc/resolv.conf
+
+echo ""
+echo "===== Listening Ports ====="
+ss -tulnp
+
+echo ""
+echo "===== Ping Test ====="
+ping -c 4 8.8.8.8
+
+echo ""
+echo "===== Curl Test ====="
+curl -I https://google.com
+
+Run:
+
+chmod +x commands.sh
+./commands.sh
+💻 Mini Project – Network Health Checker
+
+Create network-health.sh
+
+#!/bin/bash
+
+REPORT="reports/network-health.txt"
+
+mkdir -p reports
+
+echo "===== Network Health Report =====" > "$REPORT"
+echo "Generated: $(date)" >> "$REPORT"
+
+echo "" >> "$REPORT"
+hostname >> "$REPORT"
+
+echo "" >> "$REPORT"
+hostname -I >> "$REPORT"
+
+echo "" >> "$REPORT"
+ip route >> "$REPORT"
+
+echo "" >> "$REPORT"
+ping -c 4 8.8.8.8 >> "$REPORT"
+
+echo "" >> "$REPORT"
+ss -tulnp >> "$REPORT"
+
+echo "Report Generated"
+🧪 Lab Exercise
+
+Perform these tasks:
+
+Find your IP address.
+Find your default gateway.
+Ping your gateway.
+Ping 8.8.8.8.
+Resolve google.com.
+Check if port 443 is open.
+Capture 20 packets using tcpdump.
+Save the capture to capture.pcap.
+📝 notes.md
+# Advanced Linux Networking
+
+ip addr
+Shows interfaces
+
+ip route
+Shows routing table
+
+ping
+Connectivity
+
+traceroute
+Shows network path
+
+dig
+DNS lookup
+
+nslookup
+DNS query
+
+curl
+HTTP client
+
+wget
+Download files
+
+ss
+Socket statistics
+
+tcpdump
+Packet capture
+
+nc
+Test ports
+
+iperf3
+Bandwidth testing
+📄 interview.md
+# Advanced Networking Interview Questions
+
+1. Explain the OSI model.
+2. Difference between TCP and UDP?
+3. What is a default gateway?
+4. What is DNS?
+5. What is NAT?
+6. Difference between ping and traceroute?
+7. What is tcpdump?
+8. What is netcat used for?
+9. How do you troubleshoot slow network performance?
+10. What is MTU?
+11. Difference between curl and wget?
+12. How do you identify an open port?
+13. What is CIDR notation?
+14. What happens during a TCP three-way handshake?
+15. What is TLS?
+🔥 Production Scenario
+Problem
+
+A Kubernetes node cannot pull Docker images from a container registry.
+
+Investigation
+
+Check DNS:
+
+nslookup registry-1.docker.io
+
+Test connectivity:
+
+ping 8.8.8.8
+
+Test HTTPS:
+
+curl -I https://registry-1.docker.io
+
+Check routing:
+
+ip route
+
+Verify firewall:
+
+sudo ufw status
+
+Check port:
+
+nc -zv registry-1.docker.io 443
+
+Capture packets if needed:
+
+sudo tcpdump -i any port 443
+🧠 Senior DevOps Challenge
+
+Build a script called network-diagnostics.sh that:
+
+Checks internet connectivity.
+Verifies DNS resolution for google.com.
+Lists all active interfaces.
+Shows the routing table.
+Checks if ports 22, 80, and 443 are reachable on a target host.
+Measures HTTP response time using curl.
+Saves everything to reports/network-diagnostics-YYYY-MM-DD-HHMM.txt.
+Exits with a non-zero status if internet connectivity or DNS resolution fails.
+📤 Git Commit
+git add .
+git commit -m "Day015 - Advanced Linux Networking"
+git push origin main
+🎯 Skills You'll Gain Today
+
+After completing Day 15, you'll be able to:
+
+Troubleshoot Linux networking issues.
+Analyze routing and DNS problems.
+Test connectivity and ports.
+Capture and inspect network traffic.
+Measure network performance.
+Build automated network diagnostic tools.
