@@ -15,3 +15,377 @@ Goal: Secure a Linux server using industry best practices.
     ├── lab.md
     ├── reports/
     └── screenshots/
+Learning Objectives
+
+Today you'll learn
+
+Linux Security Basics
+File Permissions
+chmod
+chown
+chgrp
+ACL
+SUID
+SGID
+Sticky Bit
+UFW Firewall
+iptables Basics
+Fail2Ban
+SSH Hardening
+Password Policies
+Security Auditing
+📖 Linux Permission Model
+Owner     Group     Others
+
+rwx       rwx       rwx
+
+7         7         7
+
+Permission values
+
+r = 4
+
+w = 2
+
+x = 1
+
+Example
+
+755
+
+Owner = rwx
+
+Group = r-x
+
+Others = r-x
+🛠 Task 1 – Check File Permissions
+ls -l
+
+Example
+
+-rwxr-xr-x
+🛠 Task 2 – Change Permissions
+
+Read only
+
+chmod 444 file.txt
+
+Executable
+
+chmod +x script.sh
+
+Owner only
+
+chmod 700 script.sh
+🛠 Task 3 – Change Ownership
+sudo chown sachin:sachin file.txt
+
+Directory
+
+sudo chown -R sachin:sachin project/
+🛠 Task 4 – Access Control Lists (ACL)
+
+Install
+
+sudo apt install acl
+
+Grant permission
+
+setfacl -m u:developer:rwx project/
+
+View ACL
+
+getfacl project/
+
+Remove ACL
+
+setfacl -x u:developer project/
+🛠 Task 5 – SUID
+
+Find SUID files
+
+find / -perm -4000 2>/dev/null
+🛠 Task 6 – SGID
+
+Find SGID
+
+find / -perm -2000 2>/dev/null
+🛠 Task 7 – Sticky Bit
+
+Example
+
+chmod +t shared-folder
+
+Verify
+
+ls -ld shared-folder
+
+Output
+
+drwxrwxrwt
+🛠 Task 8 – Firewall (UFW)
+
+Status
+
+sudo ufw status
+
+Enable
+
+sudo ufw enable
+
+Allow SSH
+
+sudo ufw allow 22
+
+Allow HTTP
+
+sudo ufw allow 80
+
+Allow HTTPS
+
+sudo ufw allow 443
+
+Delete Rule
+
+sudo ufw delete allow 80
+🛠 Task 9 – iptables Basics
+
+List Rules
+
+sudo iptables -L
+
+Allow SSH
+
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+🛠 Task 10 – Password Policy
+
+Install
+
+sudo apt install libpam-pwquality
+
+Edit
+
+sudo nano /etc/security/pwquality.conf
+
+Example
+
+minlen=12
+
+minclass=3
+
+retry=3
+🛠 Task 11 – SSH Hardening
+
+Edit
+
+sudo nano /etc/ssh/sshd_config
+
+Recommended
+
+PermitRootLogin no
+
+PasswordAuthentication no
+
+MaxAuthTries 3
+
+X11Forwarding no
+
+PubkeyAuthentication yes
+
+Restart
+
+sudo systemctl restart ssh
+🛠 Task 12 – Fail2Ban
+
+Install
+
+sudo apt install fail2ban
+
+Status
+
+sudo systemctl status fail2ban
+
+Check jails
+
+sudo fail2ban-client status
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Users ====="
+who
+
+echo ""
+
+echo "===== Failed Login ====="
+sudo grep "Failed" /var/log/auth.log
+
+echo ""
+
+echo "===== Firewall ====="
+sudo ufw status
+
+echo ""
+
+echo "===== Listening Ports ====="
+ss -tulnp
+
+echo ""
+
+echo "===== SUID Files ====="
+find / -perm -4000 2>/dev/null | head
+💻 Mini Project – Linux Security Audit
+
+Create
+
+security-audit.sh
+#!/bin/bash
+
+mkdir -p reports
+
+REPORT="reports/security-report.txt"
+
+echo "Security Report" > "$REPORT"
+
+echo "Generated: $(date)" >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Users Logged In" >> "$REPORT"
+
+who >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Firewall" >> "$REPORT"
+
+sudo ufw status >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Listening Ports" >> "$REPORT"
+
+ss -tulnp >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Failed Login Attempts" >> "$REPORT"
+
+sudo grep "Failed" /var/log/auth.log >> "$REPORT"
+
+echo "Audit Completed"
+🧪 Lab Exercise
+
+Perform the following
+
+Create a shared directory.
+Apply Sticky Bit.
+Create a new user.
+Give ACL permission.
+Enable UFW.
+Allow SSH and HTTPS only.
+Disable password authentication for SSH.
+Verify Fail2Ban is running.
+📄 notes.md
+# Linux Security Notes
+
+chmod
+Change permissions
+
+chown
+Change ownership
+
+ACL
+Fine-grained permissions
+
+SUID
+Runs with owner's privileges
+
+SGID
+Runs with group's privileges
+
+Sticky Bit
+Only file owner can delete files
+
+UFW
+Simple firewall
+
+iptables
+Advanced firewall
+
+Fail2Ban
+Blocks brute-force attacks
+
+SSH Hardening
+Disable root login
+Use SSH keys
+📄 interview.md
+# Linux Security Interview Questions
+
+1. What is Linux hardening?
+2. Difference between chmod and chown?
+3. What is ACL?
+4. Explain SUID, SGID, and Sticky Bit.
+5. What is UFW?
+6. Difference between UFW and iptables?
+7. What is Fail2Ban?
+8. Why disable root SSH login?
+9. What is the principle of least privilege?
+10. How do you audit a Linux server?
+11. How do you find world-writable files?
+12. How do you secure SSH?
+13. What is SELinux? (Basics)
+14. What is AppArmor?
+15. How do you respond to repeated failed login attempts?
+🔥 Production Scenario
+Problem
+
+A production server is receiving repeated SSH brute-force login attempts.
+
+Investigation
+
+Check authentication logs:
+
+sudo grep "Failed password" /var/log/auth.log
+
+Count failed attempts by IP:
+
+sudo grep "Failed password" /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -nr
+
+Verify Fail2Ban:
+
+sudo fail2ban-client status sshd
+
+Block a suspicious IP manually (UFW example):
+
+sudo ufw deny from 192.168.1.50
+
+Confirm SSH is using key-based authentication:
+
+sudo grep -E "PasswordAuthentication|PermitRootLogin" /etc/ssh/sshd_config
+🧠 Senior DevOps Challenge
+
+Create a script named server-hardening-check.sh that:
+
+Verifies SSH root login is disabled.
+Checks whether password authentication is disabled.
+Confirms UFW is active.
+Lists listening ports.
+Finds world-writable files (excluding /proc and /sys).
+Lists users with UID ≥ 1000.
+Generates a report in reports/hardening-report-YYYY-MM-DD.txt.
+Returns a non-zero exit code if any security check fails.
+📤 Git Commit
+git add .
+git commit -m "Day016 - Linux Security and Server Hardening"
+git push origin main
+🏆 Skills You'll Gain Today
+
+After completing Day 16, you'll be able to:
+
+Secure Linux servers for production.
+Configure permissions, ownership, and ACLs.
+Manage firewalls with UFW and understand iptables basics.
+Harden SSH against common attacks.
+Use Fail2Ban to mitigate brute-force attempts.
+Audit Linux systems for common security issues.
+Apply security best practices expected in enterprise environments.
