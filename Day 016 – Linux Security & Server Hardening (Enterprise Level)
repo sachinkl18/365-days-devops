@@ -1,0 +1,17 @@
+Goal: Secure a Linux server using industry best practices.
+
+📂 Repository Structure
+365-days-devops/
+└── Day016/
+    ├── README.md
+    ├── commands.sh
+    ├── security-audit.sh
+    ├── hardening.sh
+    ├── firewall.sh
+    ├── fail2ban.md
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    ├── reports/
+    └── screenshots/
