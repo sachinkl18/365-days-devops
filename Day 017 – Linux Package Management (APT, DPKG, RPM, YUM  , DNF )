@@ -1,0 +1,36 @@
+Difficulty: ⭐⭐⭐⭐☆ (4/5)
+
+Duration: 3–4 Hours
+
+Goal: Master package installation, upgrades, repositories, version management, and troubleshooting.
+
+📂 Repository Structure
+365-days-devops/
+└── Day017/
+    ├── README.md
+    ├── commands.sh
+    ├── package-audit.sh
+    ├── repository-setup.md
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    ├── reports/
+    └── screenshots/
+🎯 Learning Objectives
+
+By the end of today you'll know:
+
+Package Managers
+APT
+DPKG
+RPM
+YUM
+DNF
+Snap
+Flatpak
+Repository Management
+GPG Keys
+Version Pinning
+Software Updates
+Package Verification            
