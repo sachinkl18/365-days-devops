@@ -229,3 +229,97 @@ Verify htop installation.
 Hold the htop package.
 Unhold it.
 Clean the package cache.
+📄 notes.md
+# Package Management Notes
+
+apt update
+Update package list
+
+apt upgrade
+Upgrade installed packages
+
+apt install
+Install package
+
+apt remove
+Remove package
+
+apt purge
+Remove with configuration
+
+dpkg -i
+Install .deb package
+
+snap install
+Install snap package
+
+apt clean
+Remove package cache
+
+apt autoremove
+Remove unused packages
+📄 interview.md
+# Package Management Interview Questions
+
+1. Difference between apt update and apt upgrade?
+2. Difference between apt remove and purge?
+3. What is dpkg?
+4. What is RPM?
+5. Difference between YUM and DNF?
+6. What is a package repository?
+7. What is GPG verification?
+8. How do you fix broken packages?
+9. What is apt autoremove?
+10. What is version pinning?
+11. How do you install a local .deb file?
+12. Why should package updates be tested before production deployment?
+🔥 Production Scenario
+Problem
+
+An application deployment fails because of missing package dependencies.
+
+Investigation
+
+Update repositories:
+
+sudo apt update
+
+Fix broken packages:
+
+sudo apt --fix-broken install
+
+Check dependencies:
+
+apt depends nginx
+
+Check held packages:
+
+apt-mark showhold
+
+Verify installed version:
+
+dpkg -s nginx
+🧠 Senior DevOps Challenge
+
+Create a script named system-package-health.sh that:
+
+Lists all upgradable packages.
+Detects held packages.
+Checks for broken dependencies.
+Reports available disk space.
+Saves the report to reports/package-health-YYYY-MM-DD.txt.
+Exits with a non-zero status if broken packages are found.
+📤 Git Commit
+git add .
+git commit -m "Day017 - Linux Package Management"
+git push origin main
+🎯 Skills You'll Gain Today
+
+After completing Day 17, you'll be able to:
+
+Manage software packages on Ubuntu and Debian.
+Understand the basics of RPM, YUM, and DNF.
+Install, remove, and verify packages.
+Manage repositories and package versions.
+Troubleshoot dependency issues.
+Automate package auditing for production systems.
