@@ -34,3 +34,198 @@ GPG Keys
 Version Pinning
 Software Updates
 Package Verification            
+Linux Package Managers
+Distribution	Package Manager	Package Format
+Ubuntu/Debian	APT	.deb
+RHEL/CentOS	YUM / DNF	.rpm
+Fedora	DNF	.rpm
+Universal	Snap	.snap
+Universal	Flatpak	.flatpak
+🛠 Task 1 – Update Package List
+
+Ubuntu
+
+sudo apt update
+
+Upgrade installed packages
+
+sudo apt upgrade -y
+
+Full upgrade
+
+sudo apt full-upgrade -y
+🛠 Task 2 – Search Packages
+apt search nginx
+
+Package details
+
+apt show nginx
+
+Installed?
+
+dpkg -l | grep nginx
+🛠 Task 3 – Install Packages
+
+Example
+
+sudo apt install nginx -y
+
+Install multiple
+
+sudo apt install git curl wget vim -y
+🛠 Task 4 – Remove Packages
+
+Remove only
+
+sudo apt remove nginx
+
+Remove completely
+
+sudo apt purge nginx
+
+Cleanup
+
+sudo apt autoremove
+🛠 Task 5 – DPKG
+
+Install manually
+
+sudo dpkg -i package.deb
+
+List packages
+
+dpkg -l
+
+Verify package
+
+dpkg -s nginx
+
+List files
+
+dpkg -L nginx
+🛠 Task 6 – Repository Management
+
+Repository list
+
+cat /etc/apt/sources.list
+
+Additional repositories
+
+ls /etc/apt/sources.list.d/
+
+Update after changes
+
+sudo apt update
+🛠 Task 7 – Snap
+
+Install
+
+sudo snap install code --classic
+
+List snaps
+
+snap list
+
+Remove
+
+sudo snap remove code
+🛠 Task 8 – Package Verification
+
+Check broken packages
+
+sudo apt --fix-broken install
+
+Dependencies
+
+apt depends nginx
+
+Reverse dependencies
+
+apt rdepends nginx
+🛠 Task 9 – Version Management
+
+Available versions
+
+apt policy nginx
+
+Hold package
+
+sudo apt-mark hold nginx
+
+Unhold
+
+sudo apt-mark unhold nginx
+🛠 Task 10 – Package Cleanup
+
+Clear cache
+
+sudo apt clean
+
+Remove old cache
+
+sudo apt autoclean
+💻 commands.sh
+#!/bin/bash
+
+echo "===== System Update ====="
+apt list --upgradable
+
+echo ""
+
+echo "===== Installed Git ====="
+dpkg -l | grep git
+
+echo ""
+
+echo "===== Repository List ====="
+ls /etc/apt/sources.list.d/
+
+echo ""
+
+echo "===== Snap Packages ====="
+snap list
+💻 Mini Project – Package Audit
+
+Create package-audit.sh
+
+#!/bin/bash
+
+mkdir -p reports
+
+REPORT="reports/package-report.txt"
+
+echo "===== Package Audit =====" > "$REPORT"
+
+echo "Generated: $(date)" >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Upgradeable Packages:" >> "$REPORT"
+
+apt list --upgradable >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Installed Git Version:" >> "$REPORT"
+
+git --version >> "$REPORT" 2>/dev/null
+
+echo "" >> "$REPORT"
+
+echo "Disk Usage:" >> "$REPORT"
+
+df -h >> "$REPORT"
+
+echo "Audit Complete"
+🧪 Lab Exercise
+
+Complete the following:
+
+Update package list.
+Install htop.
+Install tree.
+Remove tree.
+Verify htop installation.
+Hold the htop package.
+Unhold it.
+Clean the package cache.
