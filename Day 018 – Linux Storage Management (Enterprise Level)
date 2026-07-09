@@ -1,0 +1,16 @@
+Goal: Learn to manage disks, partitions, filesystems, LVM, swap, quotas, and storage troubleshooting.
+
+📂 Repository Structure
+365-days-devops/
+└── Day018/
+    ├── README.md
+    ├── commands.sh
+    ├── disk-audit.sh
+    ├── lvm-lab.md
+    ├── fstab.md
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    ├── reports/
+    └── screenshots/
