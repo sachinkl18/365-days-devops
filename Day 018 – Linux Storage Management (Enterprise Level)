@@ -32,3 +32,336 @@ LVM
 Swap
 Disk Quotas
 RAID Basics
+Storage Architecture
+Physical Disk
+      │
+      ▼
+Partition
+      │
+      ▼
+Filesystem
+      │
+      ▼
+Mount Point
+
+Example
+
+Disk
+/dev/sda
+
+Partition
+/dev/sda1
+
+Filesystem
+ext4
+
+Mount Point
+/
+🛠 Task 1 – View Storage
+lsblk
+
+Detailed
+
+lsblk -f
+
+Disk usage
+
+df -h
+
+Filesystem type
+
+df -Th
+🛠 Task 2 – View Partitions
+sudo fdisk -l
+
+or
+
+sudo parted -l
+🛠 Task 3 – Create a Partition (Lab VM)
+
+⚠️ Practice only on a virtual machine or an empty test disk. Do not modify partitions on a production system.
+
+sudo fdisk /dev/sdb
+
+Common commands:
+
+n  Create partition
+
+p  Print table
+
+w  Write changes
+
+q  Quit
+🛠 Task 4 – Create Filesystem
+
+EXT4
+
+sudo mkfs.ext4 /dev/sdb1
+
+XFS
+
+sudo mkfs.xfs /dev/sdb1
+
+Verify
+
+sudo blkid
+🛠 Task 5 – Mount Filesystem
+
+Create mount point
+
+sudo mkdir /data
+
+Mount
+
+sudo mount /dev/sdb1 /data
+
+Verify
+
+df -h
+
+Unmount
+
+sudo umount /data
+🛠 Task 6 – Persistent Mount (/etc/fstab)
+
+Find UUID
+
+sudo blkid
+
+Edit:
+
+sudo nano /etc/fstab
+
+Example entry
+
+UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx /data ext4 defaults 0 2
+
+Test without reboot
+
+sudo mount -a
+🛠 Task 7 – LVM Basics
+
+Create Physical Volume
+
+sudo pvcreate /dev/sdb1
+
+Create Volume Group
+
+sudo vgcreate vgdata /dev/sdb1
+
+Create Logical Volume
+
+sudo lvcreate -L 5G -n lvbackup vgdata
+
+View LVM
+
+sudo pvs
+sudo vgs
+sudo lvs
+🛠 Task 8 – Extend Logical Volume
+
+Extend
+
+sudo lvextend -L +2G /dev/vgdata/lvbackup
+
+Resize EXT4
+
+sudo resize2fs /dev/vgdata/lvbackup
+
+Resize XFS
+
+sudo xfs_growfs /data
+🛠 Task 9 – Swap
+
+Current swap
+
+swapon --show
+
+Create 2 GB swap file
+
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+Verify
+
+free -h
+🛠 Task 10 – Disk Usage
+
+Largest directories
+
+du -sh /*
+
+Largest files
+
+find / -type f -size +500M
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Block Devices ====="
+lsblk
+
+echo ""
+echo "===== Filesystems ====="
+df -Th
+
+echo ""
+echo "===== Disk Usage ====="
+du -sh /var/* 2>/dev/null | sort -hr | head
+
+echo ""
+echo "===== Swap ====="
+swapon --show
+💻 Mini Project – Disk Audit
+
+Create disk-audit.sh
+
+#!/bin/bash
+
+mkdir -p reports
+
+REPORT="reports/storage-report.txt"
+
+echo "===== Storage Audit =====" > "$REPORT"
+echo "Generated: $(date)" >> "$REPORT"
+
+echo "" >> "$REPORT"
+lsblk >> "$REPORT"
+
+echo "" >> "$REPORT"
+df -h >> "$REPORT"
+
+echo "" >> "$REPORT"
+free -h >> "$REPORT"
+
+echo "" >> "$REPORT"
+swapon --show >> "$REPORT"
+
+echo "Storage report generated."
+🧪 Lab Exercise
+
+Perform these tasks on a VM with an extra virtual disk:
+
+Create a new partition.
+Format it with ext4.
+Mount it at /backup.
+Make it persistent using /etc/fstab.
+Create an LVM volume.
+Extend the LVM volume.
+Create a 2 GB swap file.
+Verify all changes.
+📝 notes.md
+# Linux Storage Notes
+
+lsblk
+List block devices
+
+fdisk
+Partition disks
+
+parted
+Advanced partitioning
+
+mkfs.ext4
+Create ext4 filesystem
+
+mount
+Mount filesystem
+
+umount
+Unmount filesystem
+
+blkid
+Show UUIDs
+
+fstab
+Persistent mounts
+
+pvcreate
+Create physical volume
+
+vgcreate
+Create volume group
+
+lvcreate
+Create logical volume
+
+resize2fs
+Resize ext4 filesystem
+
+xfs_growfs
+Resize XFS filesystem
+
+swapon
+Enable swap
+📄 interview.md
+# Linux Storage Interview Questions
+
+1. Difference between MBR and GPT?
+2. What is LVM?
+3. Difference between Physical Volume, Volume Group, and Logical Volume?
+4. What is ext4?
+5. What is XFS?
+6. Difference between df and du?
+7. What is UUID?
+8. Why use /etc/fstab?
+9. How do you extend an LVM volume?
+10. What is swap?
+11. How do you troubleshoot "No space left on device"?
+12. What is RAID?
+13. Difference between RAID 0, RAID 1, RAID 5, and RAID 10?
+14. What happens if an incorrect entry is added to /etc/fstab?
+15. How do you safely recover from a failed mount at boot?
+🔥 Production Scenario
+Problem
+
+A Jenkins server fails because /var is full.
+
+Investigation
+
+Check filesystem usage:
+
+df -h
+
+Find large directories:
+
+du -sh /var/* | sort -hr
+
+Find large log files:
+
+find /var/log -type f -size +100M
+
+Check deleted-but-open files:
+
+sudo lsof +L1
+
+Archive or rotate old logs, then verify free space:
+
+df -h
+🧠 Senior DevOps Challenge
+
+Create a script named storage-health.sh that:
+
+Lists all mounted filesystems.
+Displays disk usage.
+Warns if any filesystem exceeds 80% usage.
+Reports swap usage.
+Lists the 10 largest directories under /var.
+Saves the report to reports/storage-health-YYYY-MM-DD-HHMM.txt.
+Exits with code 1 if any filesystem exceeds 90% usage.
+📤 Git Commit
+git add .
+git commit -m "Day018 - Linux Storage Management"
+git push origin main
+🏆 Skills You'll Gain Today
+
+After completing Day 18, you'll be able to:
+
+Inspect disks, partitions, and filesystems.
+Create and mount new filesystems.
+Configure persistent mounts using /etc/fstab.
+Create and manage LVM volumes.
+Configure swap space.
+Diagnose disk space issues in production.
+Perform storage health audits.
