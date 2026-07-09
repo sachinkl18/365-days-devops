@@ -14,3 +14,21 @@ Goal: Learn to manage disks, partitions, filesystems, LVM, swap, quotas, and sto
     ├── lab.md
     ├── reports/
     └── screenshots/
+🎯 Learning Objectives
+
+Today you'll learn:
+
+Linux Disks
+Partitions
+MBR vs GPT
+fdisk
+parted
+Filesystems
+ext4
+xfs
+Mount & Unmount
+/etc/fstab
+LVM
+Swap
+Disk Quotas
+RAID Basics
