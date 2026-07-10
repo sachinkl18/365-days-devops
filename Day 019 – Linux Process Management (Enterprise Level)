@@ -1,0 +1,15 @@
+Goal: Master Linux process management, CPU/memory monitoring, process priorities, and production troubleshooting.
+
+📂 Repository Structure
+365-days-devops/
+└── Day019/
+    ├── README.md
+    ├── commands.sh
+    ├── process-monitor.sh
+    ├── cpu-monitor.sh
+    ├── notes.md
+    ├── interview.md
+    ├── troubleshooting.md
+    ├── lab.md
+    ├── reports/
+    └── screenshots/
