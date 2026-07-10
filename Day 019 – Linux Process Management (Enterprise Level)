@@ -13,3 +13,357 @@ Goal: Master Linux process management, CPU/memory monitoring, process priorities
     ├── lab.md
     ├── reports/
     └── screenshots/
+Learning Objectives
+
+Today you'll learn:
+
+Process Lifecycle
+Process States
+PID & PPID
+Foreground & Background Processes
+ps
+top
+htop
+kill, pkill, killall
+nice & renice
+jobs, fg, bg
+nohup
+lsof
+strace
+Zombie Processes
+Orphan Processes
+📖 Linux Process Lifecycle
+New
+ │
+ ▼
+Ready
+ │
+ ▼
+Running
+ │
+ ├────► Waiting
+ │
+ ▼
+Terminated
+
+Each process has:
+
+PID (Process ID)
+PPID (Parent Process ID)
+Owner
+Priority
+State
+🛠️ Task 1 – View Running Processes
+
+All processes:
+
+ps -ef
+
+User processes:
+
+ps -u $USER
+
+Process tree:
+
+pstree
+🛠️ Task 2 – Monitor Processes
+
+Interactive:
+
+top
+
+Better UI:
+
+htop
+
+Install:
+
+sudo apt install htop
+🛠️ Task 3 – Find Process
+
+Find SSH:
+
+pgrep ssh
+
+Find Nginx:
+
+pgrep nginx
+
+Search:
+
+ps -ef | grep nginx
+🛠️ Task 4 – Kill Processes
+
+Kill by PID:
+
+kill 1234
+
+Force kill:
+
+kill -9 1234
+
+Kill by name:
+
+pkill nginx
+
+Kill all:
+
+killall nginx
+🛠️ Task 5 – Background Jobs
+
+Start:
+
+sleep 300 &
+
+View jobs:
+
+jobs
+
+Bring to foreground:
+
+fg %1
+
+Background again:
+
+Ctrl + Z
+bg %1
+🛠️ Task 6 – nohup
+
+Run even after logout:
+
+nohup python3 app.py &
+
+Output:
+
+nohup.out
+🛠️ Task 7 – Process Priority
+
+Run low priority:
+
+nice -n 10 python3 app.py
+
+Change priority:
+
+renice 15 PID
+
+View:
+
+ps -eo pid,ni,comm
+🛠️ Task 8 – Open Files
+
+View files opened by process:
+
+lsof -p PID
+
+Who is using port 8080?
+
+sudo lsof -i :8080
+🛠️ Task 9 – Trace System Calls
+
+Install:
+
+sudo apt install strace
+
+Trace:
+
+strace ls
+
+Attach:
+
+strace -p PID
+🛠️ Task 10 – CPU & Memory Usage
+
+Top CPU:
+
+ps -eo pid,ppid,%cpu,%mem,comm --sort=-%cpu | head
+
+Top Memory:
+
+ps -eo pid,ppid,%mem,%cpu,comm --sort=-%mem | head
+💻 commands.sh
+#!/bin/bash
+
+echo "===== Top CPU Processes ====="
+ps -eo pid,%cpu,comm --sort=-%cpu | head
+
+echo ""
+
+echo "===== Top Memory Processes ====="
+ps -eo pid,%mem,comm --sort=-%mem | head
+
+echo ""
+
+echo "===== Running Services ====="
+systemctl list-units --type=service --state=running
+
+echo ""
+
+echo "===== System Load ====="
+uptime
+
+Run:
+
+chmod +x commands.sh
+./commands.sh
+💻 Mini Project – Process Monitor
+
+Create process-monitor.sh
+
+#!/bin/bash
+
+mkdir -p reports
+
+REPORT="reports/process-report.txt"
+
+echo "===== Process Report =====" > "$REPORT"
+echo "Generated: $(date)" >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "Top CPU Processes:" >> "$REPORT"
+ps -eo pid,%cpu,comm --sort=-%cpu | head >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "Top Memory Processes:" >> "$REPORT"
+ps -eo pid,%mem,comm --sort=-%mem | head >> "$REPORT"
+
+echo "" >> "$REPORT"
+echo "System Load:" >> "$REPORT"
+uptime >> "$REPORT"
+
+echo "Process report generated."
+🧪 Lab Exercise
+
+Complete these tasks:
+
+Start a background sleep 300 process.
+Find its PID.
+Change its priority using renice.
+Bring it to the foreground.
+Send it back to the background.
+Kill the process.
+Verify it has stopped.
+📝 notes.md
+# Linux Process Notes
+
+ps
+List processes
+
+top
+Interactive process monitor
+
+htop
+Advanced process monitor
+
+kill
+Terminate process
+
+pkill
+Kill by process name
+
+killall
+Kill all matching processes
+
+nice
+Start with priority
+
+renice
+Change priority
+
+jobs
+List shell jobs
+
+fg
+Foreground job
+
+bg
+Background job
+
+nohup
+Keep process running after logout
+
+lsof
+List open files
+
+strace
+Trace system calls
+📄 interview.md
+# Linux Process Interview Questions
+
+1. What is a process?
+2. Difference between process and thread?
+3. What is PID?
+4. What is PPID?
+5. Difference between kill and kill -9?
+6. What is nice?
+7. What is renice?
+8. What is nohup?
+9. Difference between foreground and background processes?
+10. What is a zombie process?
+11. What is an orphan process?
+12. What is lsof used for?
+13. What is strace?
+14. How do you find which process is using a port?
+15. How do you identify high CPU usage?
+🔥 Production Scenario
+Problem
+
+A Java application is consuming 100% CPU on a production server.
+
+Investigation
+
+Find the process:
+
+top
+
+or
+
+ps -eo pid,%cpu,comm --sort=-%cpu | head
+
+Inspect the process:
+
+ps -fp <PID>
+
+Check open files:
+
+lsof -p <PID>
+
+Trace activity:
+
+strace -p <PID>
+
+Reduce priority (temporary):
+
+sudo renice 10 <PID>
+
+If the process is hung and cannot recover:
+
+sudo kill <PID>
+
+Use kill -9 only if a normal kill does not terminate the process.
+
+🧠 Senior DevOps Challenge
+
+Create a script named system-process-health.sh that:
+
+Lists the top 10 CPU-consuming processes.
+Lists the top 10 memory-consuming processes.
+Displays system load average.
+Counts the total number of running processes.
+Checks whether any process is using more than 80% CPU.
+Generates a report in reports/process-health-YYYY-MM-DD-HHMM.txt.
+Exits with status code 1 if a process exceeds 90% CPU usage.
+📤 Git Commit
+git add .
+git commit -m "Day019 - Linux Process Management"
+git push origin main
+🏆 Skills You'll Gain Today
+
+After completing Day 19, you'll be able to:
+
+Monitor running processes and system load.
+Analyze CPU and memory usage.
+Manage process priorities.
+Run jobs in the background.
+Keep long-running applications alive with nohup.
+Investigate processes using lsof and strace.
+Troubleshoot production performance issues.
