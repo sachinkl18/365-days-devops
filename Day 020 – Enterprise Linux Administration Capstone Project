@@ -1,0 +1,29 @@
+Duration: 6–8 Hours
+
+Goal: Build and secure a production-ready Linux server by combining everything learned in Days 1–19.
+
+This project simulates a real DevOps task where you are responsible for preparing a newly deployed Ubuntu server for production use.
+
+📂 Repository Structure
+365-days-devops/
+└── Day020/
+    ├── README.md
+    ├── setup-server.sh
+    ├── health-check.sh
+    ├── backup.sh
+    ├── restore.sh
+    ├── log-monitor.sh
+    ├── disk-monitor.sh
+    ├── process-monitor.sh
+    ├── network-check.sh
+    ├── security-audit.sh
+    ├── cron/
+    │   ├── daily-backup.cron
+    │   └── health-check.cron
+    ├── reports/
+    ├── backups/
+    ├── logs/
+    ├── screenshots/
+    ├── notes.md
+    ├── interview.md
+    └── troubleshooting.md
