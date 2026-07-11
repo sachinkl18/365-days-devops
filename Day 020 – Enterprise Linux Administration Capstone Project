@@ -27,3 +27,298 @@ This project simulates a real DevOps task where you are responsible for preparin
     ├── notes.md
     ├── interview.md
     └── troubleshooting.md
+Project Requirements
+
+Configure a production Ubuntu server with:
+
+Create users and groups
+Configure SSH Key Authentication
+Disable Root Login
+Configure UFW Firewall
+Install Fail2Ban
+Install Git, Curl, Wget, Vim
+Configure Cron Jobs
+Monitor CPU, Memory and Disk
+Monitor Network
+Monitor Logs
+Automatic Daily Backup
+Generate Daily Health Report
+Secure File Permissions
+🏗️ Phase 1 – Server Preparation
+
+Update the server:
+
+sudo apt update
+sudo apt upgrade -y
+
+Install essential packages:
+
+sudo apt install git curl wget vim htop tree unzip zip net-tools fail2ban ufw -y
+
+Verify:
+
+git --version
+curl --version
+👥 Phase 2 – User Management
+
+Create a DevOps user:
+
+sudo adduser devops
+
+Grant sudo access:
+
+sudo usermod -aG sudo devops
+
+Verify:
+
+groups devops
+🔐 Phase 3 – SSH Hardening
+
+Edit SSH configuration:
+
+sudo nano /etc/ssh/sshd_config
+
+Update:
+
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+MaxAuthTries 3
+
+Restart SSH:
+
+sudo systemctl restart ssh
+🔥 Phase 4 – Firewall
+
+Enable firewall:
+
+sudo ufw enable
+
+Allow required ports:
+
+sudo ufw allow 22
+sudo ufw allow 80
+sudo ufw allow 443
+
+Check status:
+
+sudo ufw status verbose
+🛡️ Phase 5 – Fail2Ban
+
+Start service:
+
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban
+
+Verify:
+
+sudo fail2ban-client status
+💾 Phase 6 – Backup Script
+
+Create backup.sh
+
+#!/bin/bash
+
+mkdir -p backups
+
+tar -czf backups/system-backup-$(date +%F).tar.gz /etc /home
+
+Run:
+
+chmod +x backup.sh
+./backup.sh
+📊 Phase 7 – Health Check Script
+
+Create health-check.sh
+
+#!/bin/bash
+
+mkdir -p reports
+
+REPORT="reports/health-report-$(date +%F).txt"
+
+echo "===== HEALTH REPORT =====" > "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Hostname:" >> "$REPORT"
+hostname >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Uptime:" >> "$REPORT"
+uptime >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "CPU Load:" >> "$REPORT"
+top -bn1 | head -10 >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Memory:" >> "$REPORT"
+free -h >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Disk:" >> "$REPORT"
+df -h >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Network:" >> "$REPORT"
+ip addr >> "$REPORT"
+
+echo "" >> "$REPORT"
+
+echo "Running Services:" >> "$REPORT"
+systemctl --type=service --state=running >> "$REPORT"
+
+echo "Report Generated Successfully"
+📈 Phase 8 – Disk Monitor
+df -h
+
+Alert if usage exceeds 80%.
+
+🌐 Phase 9 – Network Monitor
+ping -c 4 8.8.8.8
+ss -tulnp
+📝 Phase 10 – Log Monitoring
+journalctl -n 100
+
+Search errors:
+
+grep -i error /var/log/syslog
+⏰ Phase 11 – Cron Jobs
+
+Edit cron:
+
+crontab -e
+
+Daily backup at 2 AM:
+
+0 2 * * * /home/devops/backup.sh
+
+Health report every hour:
+
+0 * * * * /home/devops/health-check.sh
+🔍 Phase 12 – Security Audit
+
+Check failed logins:
+
+grep "Failed" /var/log/auth.log
+
+Check open ports:
+
+ss -tulnp
+
+Find SUID files:
+
+find / -perm -4000 2>/dev/null
+💻 Final Project Script
+
+Create setup-server.sh
+
+#!/bin/bash
+
+echo "Updating server..."
+sudo apt update && sudo apt upgrade -y
+
+echo "Installing packages..."
+sudo apt install git curl wget vim htop tree unzip zip ufw fail2ban -y
+
+echo "Enabling firewall..."
+sudo ufw allow OpenSSH
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw --force enable
+
+echo "Enabling Fail2Ban..."
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban
+
+echo "Server setup completed successfully."
+🧪 Lab Exercise
+
+Complete the following:
+
+Create a new DevOps user.
+Configure SSH key authentication.
+Disable root login.
+Enable UFW.
+Install Fail2Ban.
+Create backup and health-check scripts.
+Configure cron jobs.
+Generate a health report.
+Push all files to GitHub.
+📄 interview.md
+# Linux Administration Interview Questions
+
+1. How do you secure a Linux server?
+2. What steps do you perform after creating a new VM?
+3. How do you configure SSH key authentication?
+4. What is UFW?
+5. What is Fail2Ban?
+6. How do you automate backups?
+7. What is cron?
+8. How do you monitor system health?
+9. How do you troubleshoot a full disk?
+10. What commands do you use to investigate high CPU usage?
+11. How do you harden SSH?
+12. What are the first checks you perform after a production incident?
+13. How do you verify that scheduled jobs are running?
+14. How do you generate a system health report?
+15. How would you recover from a failed configuration change?
+🔥 Production Scenario
+
+Problem: A newly provisioned Ubuntu server must be ready for production within one hour.
+
+Your Checklist
+Update the OS.
+Install required packages.
+Create an administrative user.
+Configure SSH key-based authentication.
+Disable root login and password authentication.
+Enable UFW with only ports 22, 80, and 443 open.
+Install and verify Fail2Ban.
+Create automated backups.
+Configure hourly health reports and daily backups with cron.
+Verify logs, disk usage, memory, CPU, and network connectivity.
+Document all configuration changes.
+🧠 Senior DevOps Challenge
+
+Create a single script named production-server-bootstrap.sh that:
+
+Updates the operating system.
+Installs essential packages.
+Creates a devops user (if it doesn't already exist).
+Configures UFW.
+Installs and enables Fail2Ban.
+Creates backup, report, and log directories.
+Installs cron jobs for backups and health checks.
+Produces a final summary showing:
+Hostname
+IP address
+Disk usage
+Memory usage
+UFW status
+Fail2Ban status
+
+The script should be idempotent, meaning it can be run multiple times without causing errors or duplicate configuration.
+
+📤 Git Commit
+git add .
+git commit -m "Day020 - Enterprise Linux Administration Capstone Project"
+git push origin main
+🏆 Skills You've Mastered (Days 1–20)
+
+By reaching Day 20, you can confidently:
+
+✅ Administer Linux servers
+✅ Manage users, groups, and permissions
+✅ Configure SSH securely
+✅ Troubleshoot processes, storage, and networking
+✅ Monitor logs and system health
+✅ Secure servers with UFW and Fail2Ban
+✅ Automate tasks with Bash and Cron
+✅ Build production-ready Linux environments
