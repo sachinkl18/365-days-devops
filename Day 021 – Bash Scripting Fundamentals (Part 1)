@@ -1,1 +1,305 @@
 Goal: Learn the fundamentals of Bash scripting and write production-quality scripts.
+📂 Repository Structure
+365-days-devops/
+└── Day021/
+    ├── README.md
+    ├── hello.sh
+    ├── variables.sh
+    ├── input.sh
+    ├── operators.sh
+    ├── functions.sh
+    ├── system-info.sh
+    ├── notes.md
+    ├── interview.md
+    ├── lab.md
+    ├── scripts/
+    ├── reports/
+    └── screenshots/
+🎯 Learning Objectives
+
+Today you'll learn:
+
+Bash Basics
+Script Structure
+Variables
+User Input
+Command-Line Arguments
+Arithmetic Operations
+Environment Variables
+Functions
+Exit Codes
+Comments
+Script Permissions
+🛠️ Task 1 – Create Your First Script
+
+Create:
+
+nano hello.sh
+
+Code:
+
+#!/bin/bash
+
+echo "Hello, DevOps Engineer!"
+echo "Welcome to Day 021"
+
+Make executable:
+
+chmod +x hello.sh
+
+Run:
+
+./hello.sh
+🛠️ Task 2 – Variables
+#!/bin/bash
+
+NAME="Sachin"
+
+COMPANY="OpenAI"
+
+echo "Name: $NAME"
+
+echo "Company: $COMPANY"
+🛠️ Task 3 – User Input
+#!/bin/bash
+
+read -p "Enter your name: " NAME
+
+echo "Welcome $NAME"
+🛠️ Task 4 – Command-Line Arguments
+#!/bin/bash
+
+echo "First Argument : $1"
+
+echo "Second Argument : $2"
+
+echo "Total Arguments : $#"
+
+echo "All Arguments : $@"
+
+Run:
+
+./script.sh Sachin DevOps
+
+Output:
+
+First Argument : Sachin
+
+Second Argument : DevOps
+
+Total Arguments : 2
+🛠️ Task 5 – Arithmetic
+#!/bin/bash
+
+A=20
+
+B=10
+
+echo "Addition = $((A+B))"
+
+echo "Subtraction = $((A-B))"
+
+echo "Multiplication = $((A*B))"
+
+echo "Division = $((A/B))"
+🛠️ Task 6 – Environment Variables
+
+Display current user:
+
+echo $USER
+
+Display home directory:
+
+echo $HOME
+
+Display shell:
+
+echo $SHELL
+
+Display PATH:
+
+echo $PATH
+🛠️ Task 7 – Functions
+#!/bin/bash
+
+greet() {
+    echo "Welcome $1"
+}
+
+greet Sachin
+🛠️ Task 8 – Exit Codes
+#!/bin/bash
+
+echo "Running..."
+
+exit 0
+
+Check exit code:
+
+echo $?
+🛠️ Task 9 – Script Debugging
+
+Run with debug:
+
+bash -x hello.sh
+
+Syntax check:
+
+bash -n hello.sh
+💻 Mini Project – System Information Script
+
+Create system-info.sh
+
+#!/bin/bash
+
+echo "===== SYSTEM INFORMATION ====="
+
+echo "Hostname : $(hostname)"
+
+echo "User : $USER"
+
+echo "Kernel : $(uname -r)"
+
+echo "OS : $(uname -o)"
+
+echo "Uptime :"
+
+uptime
+
+echo ""
+
+echo "Memory :"
+
+free -h
+
+echo ""
+
+echo "Disk :"
+
+df -h
+
+echo ""
+
+echo "IP Address :"
+
+hostname -I
+🧪 Lab Exercise
+
+Complete the following:
+
+Create a Bash script named employee.sh.
+Ask the user for:
+Employee Name
+Employee ID
+Department
+Display the information in a formatted output.
+Return exit code 0 if all fields are entered, otherwise return exit code 1.
+📝 notes.md
+# Bash Scripting Notes
+
+#!/bin/bash
+Script interpreter
+
+chmod +x
+Make executable
+
+read
+Read user input
+
+$1, $2
+Command-line arguments
+
+$#
+Number of arguments
+
+$@
+All arguments
+
+$?
+Exit status
+
+$HOME
+Home directory
+
+$USER
+Current user
+
+Functions
+Reusable code blocks
+📄 interview.md
+# Bash Scripting Interview Questions
+
+1. What is Bash?
+2. What does #!/bin/bash mean?
+3. Difference between $* and $@?
+4. What is an exit code?
+5. How do you make a script executable?
+6. How do you read user input?
+7. What are environment variables?
+8. How do you pass arguments to a script?
+9. What is the difference between single and double quotes in Bash?
+10. How do you debug a Bash script?
+11. What are Bash functions?
+12. How do you check the exit status of the last command?
+13. What is the purpose of the PATH variable?
+14. How do you use arithmetic operations in Bash?
+15. Why is automation important in DevOps?
+🔥 Production Scenario
+Problem
+
+Every morning, the operations team manually collects server information from 20 Linux servers.
+
+Manual Steps
+SSH into each server.
+Check uptime.
+Check memory.
+Check disk usage.
+Save the information.
+Automation Solution
+
+Create a Bash script that:
+
+Connects to multiple servers (using SSH).
+Runs:
+hostname
+uptime
+free -h
+df -h
+Saves the output into timestamped report files.
+Continues even if one server is unreachable.
+Logs failures to a separate log file.
+
+This type of automation is commonly used in production environments.
+
+🧠 Senior DevOps Challenge
+
+Create a script named server_inventory.sh that:
+
+Accepts a filename containing a list of server IPs or hostnames.
+Connects to each server using SSH.
+Collects:
+Hostname
+IP address
+Kernel version
+Uptime
+CPU load
+Memory usage
+Disk usage
+Stores each server's output in reports/<hostname>.txt.
+Writes unreachable servers to failed_servers.log.
+Returns exit code 0 if all servers are processed successfully, otherwise returns 1.
+📤 Git Commit
+git add .
+git commit -m "Day021 - Bash Scripting Fundamentals Part 1"
+git push origin main
+🏆 Skills You'll Gain Today
+
+After completing Day 21, you'll be able to:
+
+Write and execute Bash scripts.
+Use variables and user input.
+Pass command-line arguments.
+Create reusable functions.
+Debug Bash scripts.
+Use environment variables.
+Build basic automation scripts.
