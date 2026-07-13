@@ -18,3 +18,299 @@ Goal: Write production-quality Bash scripts with conditions, loops, arrays, logg
     ├── reports/
     ├── logs/
     └── screenshots/
+🎯 Learning Objectives
+
+Today you'll learn:
+
+if, elif, else
+case statements
+for loops
+while loops
+until loops
+Arrays
+String manipulation
+File operations
+Error handling
+Logging
+Exit codes
+Production scripting standards
+🛠️ Task 1 – if Statement
+#!/bin/bash
+
+read -p "Enter your age: " AGE
+
+if [ "$AGE" -ge 18 ]; then
+    echo "Eligible to vote"
+else
+    echo "Not eligible"
+fi
+
+Run:
+
+chmod +x conditions.sh
+./conditions.sh
+🛠️ Task 2 – Multiple Conditions
+#!/bin/bash
+
+MARKS=85
+
+if [ "$MARKS" -ge 90 ]; then
+    echo "Grade A+"
+elif [ "$MARKS" -ge 75 ]; then
+    echo "Grade A"
+elif [ "$MARKS" -ge 60 ]; then
+    echo "Grade B"
+else
+    echo "Grade C"
+fi
+🛠️ Task 3 – case Statement
+#!/bin/bash
+
+read -p "Enter environment (dev/test/prod): " ENV
+
+case "$ENV" in
+    dev)
+        echo "Development Environment"
+        ;;
+    test)
+        echo "Testing Environment"
+        ;;
+    prod)
+        echo "Production Environment"
+        ;;
+    *)
+        echo "Invalid Environment"
+        ;;
+esac
+🛠️ Task 4 – for Loop
+#!/bin/bash
+
+for i in {1..10}
+do
+    echo "Iteration $i"
+done
+🛠️ Task 5 – while Loop
+#!/bin/bash
+
+COUNT=1
+
+while [ $COUNT -le 5 ]
+do
+    echo "Count: $COUNT"
+    ((COUNT++))
+done
+🛠️ Task 6 – Arrays
+#!/bin/bash
+
+SERVERS=("web01" "web02" "db01" "app01")
+
+for SERVER in "${SERVERS[@]}"
+do
+    echo "$SERVER"
+done
+🛠️ Task 7 – String Operations
+#!/bin/bash
+
+NAME="DevOps Engineer"
+
+echo "Length: ${#NAME}"
+
+echo "Upper: ${NAME^^}"
+
+echo "Lower: ${NAME,,}"
+
+echo "Substring: ${NAME:0:6}"
+🛠️ Task 8 – File Operations
+
+Check file exists
+
+#!/bin/bash
+
+FILE="/etc/passwd"
+
+if [ -f "$FILE" ]; then
+    echo "File exists"
+else
+    echo "File not found"
+fi
+🛠️ Task 9 – Logging
+#!/bin/bash
+
+LOGFILE="logs/app.log"
+
+mkdir -p logs
+
+echo "$(date) : Script Started" >> "$LOGFILE"
+
+echo "$(date) : Script Completed" >> "$LOGFILE"
+🛠️ Task 10 – Error Handling
+#!/bin/bash
+
+mkdir reports
+
+if [ $? -eq 0 ]; then
+    echo "Directory Created"
+else
+    echo "Directory Already Exists"
+fi
+
+Better approach:
+
+mkdir -p reports
+💻 Mini Project – Server Health Monitor
+
+Create server-health.sh
+
+#!/bin/bash
+
+mkdir -p reports
+
+REPORT="reports/server-health-$(date +%F-%H%M).txt"
+
+{
+echo "========== SERVER HEALTH =========="
+echo "Date: $(date)"
+echo ""
+echo "Hostname: $(hostname)"
+echo "Uptime:"
+uptime
+echo ""
+echo "CPU Load:"
+top -bn1 | head -5
+echo ""
+echo "Memory:"
+free -h
+echo ""
+echo "Disk:"
+df -h
+echo ""
+echo "Top 5 CPU Processes:"
+ps -eo pid,%cpu,comm --sort=-%cpu | head -6
+echo ""
+echo "Top 5 Memory Processes:"
+ps -eo pid,%mem,comm --sort=-%mem | head -6
+} > "$REPORT"
+
+echo "Health report generated: $REPORT"
+🧪 Lab Exercise
+
+Create a script named user-manager.sh that:
+
+Accepts a username as input.
+Checks if the user already exists.
+If not, creates the user.
+Logs the result to logs/user-manager.log.
+Returns:
+0 on success.
+1 on failure.
+📝 notes.md
+# Advanced Bash Notes
+
+if
+Conditional execution
+
+case
+Multiple choices
+
+for
+Loop through items
+
+while
+Loop until condition changes
+
+Arrays
+Store multiple values
+
+${#VAR}
+Length of string
+
+${VAR^^}
+Uppercase
+
+${VAR,,}
+Lowercase
+
+-f
+Check file exists
+
+mkdir -p
+Create directory if needed
+
+$?
+Exit status
+📄 interview.md
+# Advanced Bash Interview Questions
+
+1. Difference between if and case?
+2. Difference between for and while loops?
+3. How do you create an array in Bash?
+4. What does $? represent?
+5. How do you redirect output to a log file?
+6. How do you check if a file exists?
+7. What is the difference between > and >>?
+8. How do you handle errors in Bash?
+9. What are exit codes?
+10. How do you debug a Bash script?
+11. What is set -e?
+12. What is set -x?
+13. What is the purpose of trap?
+14. Why use mkdir -p?
+15. How do you write production-quality Bash scripts?
+🔥 Production Scenario
+Problem
+
+A company's operations team manually checks 50 Linux servers every morning.
+
+Each server requires checking:
+
+CPU usage
+Memory usage
+Disk usage
+Running services
+Uptime
+Your Task
+
+Write a Bash script that:
+
+Reads server names from servers.txt.
+Connects using SSH.
+Runs the required checks.
+Saves reports to reports/<hostname>.txt.
+Logs failures to logs/failed_servers.log.
+Continues even if one server is offline.
+🧠 Senior DevOps Challenge
+
+Create a script named production-health-monitor.sh that:
+
+Reads a list of servers from servers.txt.
+Uses SSH to connect to each server.
+Collects:
+Hostname
+IP address
+CPU load
+Memory usage
+Disk usage
+Uptime
+Running services
+Stores each report separately.
+Generates a summary report showing:
+Total servers checked
+Successful connections
+Failed connections
+Average disk usage
+Uses functions, loops, arrays, logging, and proper exit codes.
+📤 Git Commit
+git add .
+git commit -m "Day022 - Advanced Bash Scripting Part 2"
+git push origin main
+🏆 Skills You'll Gain Today
+
+After completing Day 22, you'll be able to:
+
+Write production-ready Bash scripts.
+Use conditional statements and loops.
+Work with arrays and strings.
+Perform file and directory operations.
+Implement logging and error handling.
+Automate server administration tasks.
+Follow Bash scripting best practices used in enterprise environments.
