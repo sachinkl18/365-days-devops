@@ -1,0 +1,20 @@
+Goal: Write production-quality Bash scripts with conditions, loops, arrays, logging, and error handling.
+
+📂 Repository Structure
+365-days-devops/
+└── Day022/
+    ├── README.md
+    ├── conditions.sh
+    ├── loops.sh
+    ├── arrays.sh
+    ├── strings.sh
+    ├── file-operations.sh
+    ├── logger.sh
+    ├── backup-script.sh
+    ├── server-health.sh
+    ├── notes.md
+    ├── interview.md
+    ├── lab.md
+    ├── reports/
+    ├── logs/
+    └── screenshots/
