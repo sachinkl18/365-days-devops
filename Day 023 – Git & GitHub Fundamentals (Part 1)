@@ -1,1 +1,293 @@
 Goal: Learn Git basics, repository management, commits, branches, and GitHub integration.
+Repository Structure
+365-days-devops/
+└── Day023/
+    ├── README.md
+    ├── git-cheatsheet.md
+    ├── notes.md
+    ├── interview.md
+    ├── lab.md
+    ├── git-workflow.md
+    ├── sample-project/
+    │   ├── index.html
+    │   ├── style.css
+    │   ├── script.js
+    │   └── .gitignore
+    ├── screenshots/
+    └── reports/
+🎯 Learning Objectives
+
+Today you'll learn:
+
+What is Version Control?
+Git Architecture
+Git Installation
+Git Configuration
+Initialize Repository
+Clone Repository
+Git Status
+Git Add
+Git Commit
+Git Log
+Git Diff
+.gitignore
+GitHub Basics
+📖 What is Git?
+
+Git is a Distributed Version Control System (DVCS).
+
+It helps you:
+
+Track code changes
+Work with teams
+Roll back mistakes
+Manage multiple versions
+Automate deployments
+📖 Git Architecture
+Working Directory
+        │
+git add
+        ▼
+Staging Area
+        │
+git commit
+        ▼
+Local Repository
+        │
+git push
+        ▼
+GitHub Repository
+🛠️ Task 1 – Install Git
+
+Ubuntu
+
+sudo apt update
+sudo apt install git -y
+
+Check version
+
+git --version
+🛠️ Task 2 – Configure Git
+git config --global user.name "Sachin KL"
+
+git config --global user.email "your-email@example.com"
+
+Verify
+
+git config --list
+🛠️ Task 3 – Create Repository
+mkdir git-demo
+
+cd git-demo
+
+git init
+
+Check
+
+git status
+🛠️ Task 4 – Create Files
+echo "# My DevOps Project" > README.md
+
+touch app.sh
+
+Status
+
+git status
+🛠️ Task 5 – Add Files
+
+Single file
+
+git add README.md
+
+All files
+
+git add .
+
+Check
+
+git status
+🛠️ Task 6 – Commit
+git commit -m "Initial commit"
+
+View history
+
+git log
+
+Compact log
+
+git log --oneline
+🛠️ Task 7 – Modify Files
+
+Append text
+
+echo "Welcome to Git" >> README.md
+
+Check changes
+
+git diff
+
+Commit changes
+
+git add README.md
+
+git commit -m "Updated README"
+🛠️ Task 8 – Clone Repository
+git clone https://github.com/username/repository.git
+🛠️ Task 9 – Create .gitignore
+*.log
+*.tmp
+node_modules/
+.env
+dist/
+
+Verify ignored files
+
+git status
+🛠️ Task 10 – Git Help
+git help
+
+git help commit
+
+git help log
+💻 Mini Project – Create Your First Git Repository
+
+Create a folder:
+
+DevOps-Portfolio
+
+Structure:
+
+DevOps-Portfolio/
+├── README.md
+├── scripts/
+│   └── hello.sh
+├── docs/
+└── .gitignore
+
+Initialize Git:
+
+git init
+
+git add .
+
+git commit -m "Created DevOps Portfolio"
+🧪 Lab Exercise
+
+Complete these tasks:
+
+Install Git.
+Configure your username and email.
+Create a repository named git-practice.
+Add a README.md.
+Commit the file.
+Modify it.
+View the differences.
+Commit again.
+View the commit history.
+📝 notes.md
+# Git Basics
+
+git init
+Initialize repository
+
+git status
+Check repository status
+
+git add
+Stage files
+
+git commit
+Save changes
+
+git log
+View commit history
+
+git diff
+Show changes
+
+git clone
+Copy repository
+
+.gitignore
+Ignore unnecessary files
+📄 interview.md
+# Git Interview Questions
+
+1. What is Git?
+2. Difference between Git and GitHub?
+3. What is a repository?
+4. What is the staging area?
+5. Difference between git add and git commit?
+6. What does git status show?
+7. What is .gitignore?
+8. What is git diff?
+9. How do you clone a repository?
+10. Why is Git important in DevOps?
+11. What is a commit hash?
+12. Can Git work without GitHub?
+13. What is a distributed version control system?
+14. What is HEAD in Git?
+15. What information is stored in a commit?
+🔥 Production Scenario
+Problem
+
+A developer accidentally overwrote important configuration files.
+
+Investigation
+
+Check repository status:
+
+git status
+
+Review commit history:
+
+git log --oneline
+
+Inspect changes:
+
+git diff
+
+Restore a modified file (before it's committed):
+
+git restore README.md
+
+Restore a deleted file from the latest commit:
+
+git restore path/to/file
+🧠 Senior DevOps Challenge
+
+Create a repository named devops-automation that contains:
+
+devops-automation/
+├── README.md
+├── scripts/
+│   ├── backup.sh
+│   ├── health-check.sh
+│   └── cleanup.sh
+├── docs/
+├── .gitignore
+└── LICENSE
+
+Requirements:
+
+Initialize Git.
+Make at least 5 meaningful commits.
+Use clear commit messages.
+Create a GitHub repository.
+Push your local repository to GitHub.
+Verify the repository is available online.
+📤 Git Commit
+git add .
+git commit -m "Day023 - Git and GitHub Fundamentals Part 1"
+git push origin main
+🏆 Skills You'll Gain Today
+
+By completing Day 23, you'll be able to:
+
+Install and configure Git.
+Create and manage local repositories.
+Stage and commit changes.
+View project history.
+Compare file changes.
+Use .gitignore effectively.
+Push projects to GitHub.
