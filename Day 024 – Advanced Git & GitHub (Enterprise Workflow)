@@ -1,1 +1,332 @@
 Goal: Master Git branching, merging, rebasing, pull requests, tags, stashing, and recovery techniques.
+Repository Structure
+365-days-devops/
+└── Day024/
+    ├── README.md
+    ├── notes.md
+    ├── interview.md
+    ├── lab.md
+    ├── git-flow.md
+    ├── merge-conflict-demo/
+    ├── release-demo/
+    ├── screenshots/
+    └── reports/
+🎯 Learning Objectives
+
+Today you'll learn:
+
+Git Branches
+Branch Workflow
+Git Merge
+Merge Conflicts
+Git Rebase
+Git Stash
+Git Tags
+Remote Repositories
+Pull Requests (PR)
+Cherry-pick
+Reset
+Revert
+Git Fetch
+Git Pull
+📖 Enterprise Git Workflow
+main
+ │
+ ├─────────────── Release
+ │
+ ├──── develop
+ │       │
+ │       ├──── feature/login
+ │       ├──── feature/payment
+ │       ├──── feature/search
+ │
+ └──── hotfix
+🛠️ Task 1 – Create Branches
+
+List branches
+
+git branch
+
+Create branch
+
+git branch feature-login
+
+Switch
+
+git checkout feature-login
+
+Or
+
+git switch feature-login
+
+Create & switch
+
+git checkout -b feature-dashboard
+🛠️ Task 2 – Merge Branch
+
+Switch to main
+
+git checkout main
+
+Merge
+
+git merge feature-dashboard
+
+Delete merged branch
+
+git branch -d feature-dashboard
+🛠️ Task 3 – Merge Conflict
+
+Edit the same line in two branches.
+
+Merge:
+
+git merge feature-login
+
+Conflict example:
+
+<<<<<<< HEAD
+Production Code
+=======
+Development Code
+>>>>>>> feature-login
+
+Resolve manually, then:
+
+git add .
+
+git commit
+🛠️ Task 4 – Git Rebase
+
+Move commits on top of another branch
+
+git checkout feature-api
+
+git rebase main
+
+Abort
+
+git rebase --abort
+
+Continue
+
+git rebase --continue
+🛠️ Task 5 – Git Stash
+
+Save changes temporarily
+
+git stash
+
+List
+
+git stash list
+
+Restore
+
+git stash pop
+🛠️ Task 6 – Git Tags
+
+Create lightweight tag
+
+git tag v1.0
+
+Annotated tag
+
+git tag -a v1.0 -m "First Release"
+
+List tags
+
+git tag
+
+Push tags
+
+git push origin --tags
+🛠️ Task 7 – Remote Repository
+
+Show remote
+
+git remote -v
+
+Add remote
+
+git remote add origin https://github.com/username/project.git
+
+Push
+
+git push -u origin main
+🛠️ Task 8 – Fetch vs Pull
+
+Fetch
+
+git fetch
+
+Pull
+
+git pull
+
+Difference:
+
+git fetch downloads changes but does not merge them.
+git pull downloads and merges changes.
+🛠️ Task 9 – Reset & Revert
+
+Soft reset
+
+git reset --soft HEAD~1
+
+Hard reset (⚠️ destructive)
+
+git reset --hard HEAD~1
+
+Safe revert
+
+git revert HEAD
+🛠️ Task 10 – Cherry-pick
+
+Copy one commit
+
+git cherry-pick <commit-hash>
+
+Useful for moving a single bug fix to another branch.
+
+💻 Mini Project – Enterprise Git Workflow
+
+Create:
+
+devops-project/
+├── README.md
+├── app/
+├── scripts/
+├── docs/
+└── .gitignore
+
+Workflow:
+
+Initialize repository.
+Create develop.
+Create feature-login.
+Add feature.
+Commit.
+Merge into develop.
+Merge develop into main.
+Tag v1.0.
+Push everything to GitHub.
+🧪 Lab Exercise
+
+Complete these tasks:
+
+Create a new repository.
+Create develop and feature-auth branches.
+Make changes in both.
+Merge feature-auth into develop.
+Create and push a tag v1.0.
+Stash uncommitted changes and restore them.
+Demonstrate git fetch and git pull.
+📝 notes.md
+# Advanced Git Notes
+
+git branch
+List branches
+
+git checkout -b
+Create and switch branch
+
+git merge
+Merge branches
+
+git rebase
+Reapply commits
+
+git stash
+Temporarily save changes
+
+git tag
+Create release tag
+
+git fetch
+Download changes
+
+git pull
+Fetch and merge
+
+git reset
+Move HEAD
+
+git revert
+Undo commit safely
+
+git cherry-pick
+Apply a specific commit
+📄 interview.md
+# Advanced Git Interview Questions
+
+1. What is Git Flow?
+2. Difference between merge and rebase?
+3. What is a merge conflict?
+4. How do you resolve merge conflicts?
+5. Difference between fetch and pull?
+6. What is Git stash?
+7. What are Git tags?
+8. Difference between reset and revert?
+9. What is cherry-pick?
+10. What is HEAD?
+11. What is origin?
+12. What is upstream?
+13. What is a Pull Request?
+14. Why use feature branches?
+15. What branching strategy does your team follow?
+🔥 Production Scenario
+Problem
+
+A critical bug is fixed in the hotfix branch, but the fix is also needed in the develop branch without merging all hotfix changes.
+
+Solution
+
+Find the commit:
+
+git log --oneline
+
+Copy only that commit:
+
+git checkout develop
+git cherry-pick <commit-hash>
+
+Push:
+
+git push origin develop
+
+This allows you to transfer only the required fix.
+
+🧠 Senior DevOps Challenge
+
+Create an enterprise Git repository with:
+
+main
+develop
+feature-monitoring
+feature-backup
+hotfix-security
+
+Complete the following:
+
+Make at least 10 meaningful commits.
+Resolve one merge conflict manually.
+Create and apply one stash.
+Create an annotated tag v1.0.
+Push all branches and tags to GitHub.
+Open a Pull Request from develop to main.
+Merge the Pull Request and verify the history.
+📤 Git Commit
+git add .
+git commit -m "Day024 - Advanced Git and GitHub"
+git push origin main
+🏆 Skills You'll Gain Today
+
+After completing Day 24, you'll be able to:
+
+Work confidently with Git branches.
+Resolve merge conflicts.
+Use rebase, stash, reset, and revert appropriately.
+Manage releases with Git tags.
+Collaborate using Pull Requests.
+Apply enterprise Git workflows used by DevOps teams.
