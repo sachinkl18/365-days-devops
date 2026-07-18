@@ -1,0 +1,344 @@
+oday you begin the CI/CD Module.
+
+Your goal is to create your first automated pipeline that runs automatically whenever you push code to GitHub.
+
+🎯 What You Will Learn
+GitHub Actions
+Workflows
+Events
+Jobs
+Steps
+Runners
+Environment variables
+Secrets
+Artifacts
+CI pipeline design
+📂 Repository Structure
+365-days-devops/
+└── Day025/
+    ├── README.md
+    ├── app/
+    │   ├── app.sh
+    │   └── test.sh
+    ├── .github/
+    │   └── workflows/
+    │       └── ci.yml
+    ├── notes.md
+    ├── interview.md
+    └── screenshots/
+🧠 GitHub Actions Architecture
+Developer
+    │
+    ▼
+git push
+    │
+    ▼
+GitHub Repository
+    │
+    ▼
+GitHub Actions Workflow
+    │
+    ├── Job
+    │    ├── Step 1: Checkout
+    │    ├── Step 2: Install
+    │    ├── Step 3: Test
+    │    └── Step 4: Build
+    │
+    ▼
+Success / Failure
+📁 Task 1 – Create Your Workflow Directory
+
+From your project root:
+
+mkdir -p .github/workflows
+
+Create the workflow:
+
+nano .github/workflows/ci.yml
+⚙️ Task 2 – Create Your First CI Pipeline
+name: DevOps CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Show System Information
+        run: |
+          echo "Hostname: $(hostname)"
+          echo "User: $USER"
+          uname -a
+
+      - name: Run Application
+        run: |
+          chmod +x app/app.sh
+          ./app/app.sh
+
+      - name: Run Tests
+        run: |
+          chmod +x app/test.sh
+          ./app/test.sh
+🛠️ Task 3 – Create Application
+
+Create:
+
+nano app/app.sh
+#!/bin/bash
+
+echo "DevOps Application Started"
+echo "Application is running successfully"
+
+Make executable:
+
+chmod +x app/app.sh
+🧪 Task 4 – Create Tests
+
+Create:
+
+nano app/test.sh
+#!/bin/bash
+
+echo "Running tests..."
+
+if [ -f "app/app.sh" ]; then
+    echo "PASS: Application file exists"
+else
+    echo "FAIL: Application file missing"
+    exit 1
+fi
+
+echo "All tests passed"
+📤 Task 5 – Push to GitHub
+git add .
+git commit -m "Day025 - Created GitHub Actions CI Pipeline"
+git push origin main
+
+Now open your GitHub repository and go to:
+
+Actions
+
+You should see your workflow running.
+
+🧪 Important Challenge: Create a Failure
+
+Temporarily change:
+
+if [ -f "app/app.sh" ]; then
+
+to:
+
+if [ -f "app/missing.sh" ]; then
+
+Commit and push:
+
+git add .
+git commit -m "Test CI failure"
+git push
+
+Your GitHub Actions pipeline should fail.
+
+Then fix the problem and push again.
+
+This is an important DevOps skill: understanding how to troubleshoot failed CI pipelines.
+
+🔐 Task 6 – Environment Variables
+
+Update your workflow:
+
+env:
+  ENVIRONMENT: production
+  APPLICATION_NAME: devops-demo
+
+Example:
+
+name: DevOps CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  ENVIRONMENT: production
+  APPLICATION_NAME: devops-demo
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Display Environment
+        run: |
+          echo "Environment: $ENVIRONMENT"
+          echo "Application: $APPLICATION_NAME"
+🔒 Task 7 – GitHub Secrets
+
+Never write passwords or tokens directly in your workflow.
+
+Bad:
+
+PASSWORD: mypassword123
+
+Instead, create a GitHub Secret:
+
+Repository
+   ↓
+Settings
+   ↓Secrets and variables
+   ↓
+Actions
+   ↓
+New repository secret
+
+Example secret name:
+
+APP_SECRET
+
+Use it:
+
+- name: Use Secret
+  run: |
+    echo "Secret is configured"
+  env:
+    APP_SECRET: ${{ secrets.APP_SECRET }}
+
+⚠️ Never print secrets in logs.
+
+📦 Task 8 – Upload Build Artifacts
+
+Add:
+
+- name: Create Build File
+  run: |
+    mkdir -p build
+    echo "Build completed successfully" > build/result.txt
+
+- name: Upload Artifact
+  uses: actions/upload-artifact@v4
+  with:
+    name: build-output
+    path: build/
+
+After the workflow completes, you can download the build artifact from the Actions run.
+
+🧠 Senior DevOps Challenge
+
+Create a complete CI pipeline with these stages:
+
+Checkout
+   ↓
+Validate
+   ↓
+Test
+   ↓
+Build
+   ↓
+Upload Artifact
+
+Your pipeline must:
+
+Run on every push to main.
+Run on every Pull Request.
+Validate Bash scripts.
+Run application tests.
+Create a build directory.
+Upload the build output as an artifact.
+Fail if any test fails.
+🏆 Production Problem to Solve
+Problem
+
+Your CI pipeline is failing with:
+
+Process completed with exit code 1
+Debugging Process
+
+First check:
+
+Which step failed?
+
+Then inspect:
+
+The workflow YAML.
+The command that failed.
+File permissions.
+Missing dependencies.
+Incorrect file paths.
+Environment variables.
+Exit codes.
+
+Run Bash syntax validation locally:
+
+bash -n app/app.sh
+
+Run the test locally:
+
+bash app/test.sh
+
+Then push the fix:
+
+git add .
+git commit -m "Fix CI pipeline failure"
+git push
+📄 notes.md
+# GitHub Actions Notes
+
+Workflow
+A YAML file that defines automation.
+
+Event
+The event that triggers a workflow.
+
+Job
+A group of steps executed on a runner.
+
+Step
+An individual command or action.
+
+Runner
+The machine that executes the job.
+
+Artifact
+A file generated by a workflow.
+
+CI
+Continuous Integration.
+
+CD
+Continuous Delivery or Deployment.
+
+Secret
+Sensitive data stored securely in GitHub.
+📄 interview.md
+# GitHub Actions Interview Questions
+
+1. What is GitHub Actions?
+2. What is a workflow?
+3. What is a runner?
+4. What is a job?
+5. What is a step?
+6. What is the difference between run and uses?
+7. How do you trigger a workflow?
+8. How do you store secrets?
+9. What is an artifact?
+10. How do you debug a failed workflow?
+11. What is CI?
+12. What is CD?
+13. How do you run a workflow only on the main branch?
+14. How do you run tests automatically?
+15. How do you prevent secrets from appearing in logs?
+📤 GitHub Commit
+git add .
+git commit -m "Day025 - GitHub Actions CI Pipeline"
+git push origin main
