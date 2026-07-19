@@ -1,1 +1,330 @@
 Today you will build a professional multi-stage CI pipeline similar to what DevOps teams use in real companies.
+Today's Goal
+
+Build this pipeline:
+
+Code Push
+    ↓
+Lint / Validate
+    ↓
+Test
+    ↓
+Build
+    ↓
+Artifact
+    ↓
+Deploy Approval
+
+You will learn:
+
+Multiple jobs
+Job dependencies
+Matrix strategy
+Caching
+Artifacts
+Manual workflow execution
+Scheduled workflows
+Job outputs
+CI pipeline troubleshooting
+📂 Repository Structure
+365-days-devops/
+└── Day026/
+    ├── .github/
+    │   └── workflows/
+    │       └── advanced-ci.yml
+    ├── app/
+    │   ├── app.sh
+    │   └── test.sh
+    ├── build/
+    ├── reports/
+    ├── README.md
+    ├── notes.md
+    ├── interview.md
+    └── troubleshooting.md
+🧠 Pipeline Architecture
+                 ┌──────────────┐
+                 │    LINT      │
+                 └──────┬───────┘
+                        │
+                        ▼
+                 ┌──────────────┐
+                 │     TEST     │
+                 └──────┬───────┘
+                        │
+                        ▼
+                 ┌──────────────┐
+                 │    BUILD     │
+                 └──────┬───────┘
+                        │
+                        ▼
+                 ┌──────────────┐
+                 │   ARTIFACT   │
+                 └──────────────┘
+🛠️ Task 1 – Create Advanced Workflow
+
+Create:
+
+mkdir -p .github/workflows
+nano .github/workflows/advanced-ci.yml
+
+Add:
+
+name: Advanced CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+
+  lint:
+    name: Validate Bash Scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck
+        run: |
+          shellcheck app/*.sh
+
+
+  test:
+    name: Run Tests
+    needs: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Make Scripts Executable
+        run: chmod +x app/*.sh
+
+      - name: Run Tests
+        run: ./app/test.sh
+
+
+  build:
+    name: Build Application
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create Build
+        run: |
+          mkdir -p build
+          cp app/app.sh build/
+          cp app/test.sh build/
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-build
+          path: build/
+🔗 Understanding needs
+
+This:
+
+needs: lint
+
+means:
+
+lint
+ ↓
+test
+ ↓
+build
+
+If the lint job fails:
+
+lint ❌
+   ↓
+test ⏭️ skipped
+   ↓
+build ⏭️ skipped
+
+This is called job dependency.
+
+🛠️ Task 2 – Add Matrix Strategy
+
+Create a new job:
+
+  compatibility:
+    name: Test on Multiple Ubuntu Versions
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        shell:
+          - bash
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Check Bash Version
+        run: |
+          bash --version
+
+Matrix builds are useful when testing applications against multiple versions or environments.
+
+🛠️ Task 3 – Add Scheduled Execution
+
+Update the workflow:
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+  schedule:
+    - cron: "0 0 * * *"
+
+This runs the workflow daily.
+
+⚠️ GitHub Actions uses UTC time for cron schedules.
+
+🛠️ Task 4 – Manual Workflow Execution
+
+Because you added:
+
+workflow_dispatch:
+
+you can manually run the workflow from:
+
+GitHub Repository
+      ↓
+Actions
+      ↓
+Advanced CI Pipeline
+      ↓
+Run workflow
+
+This is useful for:
+
+Manual deployments
+Emergency jobs
+Testing pipeline changes
+Operational tasks
+🛠️ Task 5 – Job Outputs
+
+Add an output to the build job:
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    outputs:
+      build_status: ${{ steps.build-step.outputs.status }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Application
+        id: build-step
+        run: |
+          mkdir -p build
+          echo "Build completed" > build/result.txt
+          echo "status=success" >> "$GITHUB_OUTPUT"
+
+A job can pass information to another job using outputs.
+
+🛠️ Task 6 – Add a Deployment Simulation
+
+Add:
+
+  deploy:
+    name: Deploy Application
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment: production
+
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: application-build
+          path: build/
+
+      - name: Deploy
+        run: |
+          echo "Deploying application..."
+          ls -la build/
+          echo "Deployment completed successfully"
+
+Your pipeline becomes:
+
+Lint
+ ↓
+Test
+ ↓
+Build
+ ↓
+Deploy
+🔥 Production Problem to Solve
+Problem
+
+Your pipeline shows:
+
+build job skipped
+
+But your test job succeeded.
+
+Investigate:
+
+Check the needs relationship.
+Check whether the job name is correct.
+Check whether an earlier dependency failed.
+Check the workflow execution graph.
+Check whether a condition prevented execution.
+
+Example:
+
+needs: test
+
+The job name must exactly match:
+
+test:
+🧪 Failure Simulation
+
+Change your test:
+
+echo "exit 1" >> app/test.sh
+
+Push:
+
+git add .
+git commit -m "Test pipeline failure"
+git push
+
+Expected:
+
+lint     ✅
+test     ❌
+build    ⏭️
+deploy   ⏭️
