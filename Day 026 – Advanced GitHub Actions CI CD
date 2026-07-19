@@ -328,3 +328,101 @@ lint     ✅
 test     ❌
 build    ⏭️
 deploy   ⏭️
+Fix the test:
+
+sed -i '/exit 1/d' app/test.sh
+
+Commit:
+
+git add .
+git commit -m "Fix CI pipeline"
+git push
+🧠 Senior DevOps Challenge
+
+Build a complete pipeline with:
+
+┌──────────┐
+│   LINT   │
+└────┬─────┘
+     ▼
+┌──────────┐
+│  TEST    │
+└────┬─────┘
+     ▼
+┌──────────┐
+│  BUILD   │
+└────┬─────┘
+     ▼
+┌──────────┐
+│ ARTIFACT │
+└────┬─────┘
+     ▼
+┌──────────┐
+│  DEPLOY  │
+└──────────┘
+
+Requirements:
+
+Lint all Bash scripts.
+Run automated tests.
+Build the application.
+Upload an artifact.
+Download the artifact in the deploy job.
+Support manual execution.
+Run on push to main.
+Run on Pull Requests.
+Run daily on a schedule.
+Fail correctly when a stage fails.
+Use needs to control job dependencies.
+📄 notes.md
+# Advanced GitHub Actions Notes
+
+needs
+Defines job dependencies.
+
+strategy.matrix
+Runs a job with multiple configurations.
+
+workflow_dispatch
+Allows manual workflow execution.
+
+schedule
+Runs workflows automatically using cron.
+
+artifact
+Stores files produced by a workflow.
+
+upload-artifact
+Uploads files.
+
+download-artifact
+Downloads files.
+
+GITHUB_OUTPUT
+Passes outputs between steps.
+
+environment
+Defines deployment environments.
+📄 interview.md
+# Advanced GitHub Actions Interview Questions
+
+1. What is the difference between a job and a step?
+2. How do you create job dependencies?
+3. What does needs do?
+4. What is a matrix strategy?
+5. What is an artifact?
+6. How do you upload an artifact?
+7. How do you download an artifact?
+8. How do you manually trigger a workflow?
+9. How do you schedule a workflow?
+10. What is GITHUB_OUTPUT?
+11. How do you skip a job conditionally?
+12. How do you troubleshoot a skipped job?
+13. How do you create a multi-stage CI pipeline?
+14. What happens when a dependency job fails?
+15. How would you design a production CI pipeline?
+📤 Git Commit
+git add .
+git commit -m "Day026 - Advanced GitHub Actions CI Pipeline"
+git push origin main
+
